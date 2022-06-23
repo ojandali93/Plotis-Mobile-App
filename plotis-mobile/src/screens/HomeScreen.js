@@ -1,9 +1,13 @@
 import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import PropertyTile from '../components/PropertyTile.js'
 
 const HomeScreen = () => {
   return (
-    <Text>Home Screen: Shows currentl listings!</Text>
+    <View>
+      <Text>Home Screen: Shows currentl listings!</Text>
+      <PropertyTile />
+    </View>
   )
 }
 

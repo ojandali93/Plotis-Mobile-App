@@ -16,7 +16,7 @@ const StackNav = createStackNavigator();
 const HomeStack = () => {
   return (
     <StackNav.Navigator initialRouteName='Home'>
-      <StackNav.Screen name="HomeStack" component={HomeScreen} />
+      <StackNav.Screen name="HomeStack" component={HomeScreen}/>
       <StackNav.Screen name="DetailsStack" component={PropertyDetail} />
      </StackNav.Navigator>
   )

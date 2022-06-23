@@ -1,9 +1,12 @@
 import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import PropertyTile from '../components/PropertyTile'
  
 const FavoriteScreen = () => {
   return (
-    <Text>This is the favorite screen. It will show properties the user favorited</Text>
+    <View>
+      <PropertyTile />
+    </View>
   )
 }
 
