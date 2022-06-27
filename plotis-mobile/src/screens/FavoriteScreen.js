@@ -1,11 +1,21 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, FlatList, StyleSheet } from 'react-native'
 import PropertyTile from '../components/PropertyTile'
  
-const FavoriteScreen = () => {
+const FavoriteScreen = ({navigation}) => {
+
+  const properties = [{key: 1}, {key: 2}, {key: 3}]
+
+  const PropertyDetailScreen = () => {
+    navigation.navigate('FavoriteDetailsStack')
+  }
+
   return (
-    <View>
-      <PropertyTile />
+    <View style={styles.screenContainer}>
+      <FlatList 
+        data={properties}
+        renderItem={({item}) => <PropertyTile name={item} PropertyDetailScreen={PropertyDetailScreen}/>}
+      />
     </View>
   )
 }
