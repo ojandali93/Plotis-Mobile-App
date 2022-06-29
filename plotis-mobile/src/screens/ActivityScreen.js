@@ -1,9 +1,28 @@
 import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, View, Image, TouchableOpacity, FlatList } from 'react-native'
+import ActivityDetail from '../components/ActivityDetail'
 
-const ActivityScreen = () => {
+const ActivityScreen = ({navigation}) => {
+
+  const activity = [{key: 1}, {key:2}, {key:3}, {key: 4}, {key:5}, {key:6}, {key:7}, {key: 8}, {key:9}, {key:10}]
+
+  const ActivtyDetailStack = () => {
+    navigation.navigate('ActivityDetailsStack')
+  }
+
+  const renderItem = ({ item }) => (
+    <ActivityDetail stytle={styles.tile} ActivtyDetailStack={ActivtyDetailStack}/>
+  );
+
   return (
-    <Text>This screen will show all of the activity notifications the user recieves</Text>
+    <View>
+      <View>
+        <FlatList 
+          data={activity}
+          renderItem={renderItem}
+        />
+      </View>
+    </View>
   )
 }
 
