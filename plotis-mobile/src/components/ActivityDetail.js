@@ -23,7 +23,7 @@ const ActivityDetail = (props) => {
             <View>
               <Text>1243 Atlantic Circle</Text>
               <Text>Moreno Valley, CA 9255s</Text>
-            </View>
+            </View>\
             <View style={styles.activity}>
               <Text style={{fontWeight: 'bold'}}>Price cut -$100,000</Text>
             </View>

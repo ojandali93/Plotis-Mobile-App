@@ -2,34 +2,44 @@ import React from 'react'
 import { Dimensions } from 'react-native'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 
+import { convertToDollars, convertFirstUpper, formatSingleStringAddress } from '../utilities'
+
 const PropertyTile = (props) => {
 
   const {
+    item,
     PropertyDetailScreen
   } = props
 
+  console.log(item)
+
   let deviceWidth = Dimensions.get('window').width - 16
   var aspectHeight = (deviceWidth / 1.78) + 1
+
+  const propAddress = formatSingleStringAddress(item.address)
+  console.log(propAddress)
+  const propertyAddress1 = propAddress[0]
+  const propertyAddress2 = propAddress[1] + ', ' + propAddress[2]
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => {PropertyDetailScreen()}}>
         <View style={[styles.imageContainer,{height: aspectHeight}]}>
-          <Image style={styles.mainImage} source={require('../../assets/luxury-home-1.jpeg')}/>
+          <Image style={styles.mainImage} source={{uri: item.imgSrc}}/>
         </View>
         <View style={styles.contentContainer}>
           <View style={styles.priceContainer}>
-            <Text style={styles.price}>$ 1,259,999</Text>
-            <Text style={styles.status}>For Sale</Text>
+            <Text style={styles.price}>${convertToDollars(item.price)}</Text>
+            <Text style={styles.status}>{convertFirstUpper(item.listingStatus)}</Text>
           </View>
           <View style={styles.addressContainer}>
-            <Text style={styles.address}>23 Lowlette Lane.</Text>
-            <Text style={styles.address}>Mission Viejo, CA 92692</Text>
+            <Text style={styles.address}>{propertyAddress1}</Text>
+            <Text style={styles.address}>{propertyAddress2}</Text>
           </View>
           <View style={styles.separator}></View>
           <View style={styles.details}>
-            <Text style={styles.summary}>6 Beds | 6 Baths | 10,000 Sqft. | 1.3 acre Lot</Text>
-            <Text style={styles.homeType}>Single Family Residence</Text>
+            <Text style={styles.summary}>{item.bedrooms} Beds | {item.bathrooms} Baths | {item.livingArea} Sqft.</Text>
+            <Text style={styles.homeType}>{convertFirstUpper(item.propertyType)}</Text>
           </View>
           <View style={styles.separator}></View>
           <View style={styles.details}>

@@ -1,15 +1,32 @@
-import { NavigationContainer } from '@react-navigation/native'
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
+
 import PropertyTile from '../components/PropertyTile.js'
 import SearchBar from '../components/SearchBar.js'
+import { generalOptions } from '../api/zillowApi.js'
+
+import axios from 'axios';
 
 const HomeScreen = ({navigation}) => {
-  console.log(navigation)
-
   const properties = [{key: 1}, {key: 2}, {key: 3}]
 
   const [search, setSearch] = useState('')
+  const [results, setResults] = useState([])
+
+  useEffect(() => {
+    console.log('send a request')
+    axios.request(generalOptions)
+      .then(function (response) {
+        setResults(response.data.props)
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, [])
+
+  useEffect(() => {
+    // console.log(results)
+  }, [results])
 
   useEffect(() => {
     console.log(search)
@@ -23,8 +40,8 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.screenContainer}>
       <SearchBar search={search} setSearch={setSearch}/>
       <FlatList 
-        data={properties}
-        renderItem={({item}) => <PropertyTile name={item} PropertyDetailScreen={PropertyDetailScreen}/>}
+        data={results}
+        renderItem={({item}) => <PropertyTile item={item} PropertyDetailScreen={PropertyDetailScreen}/>}
       />
     </View>
   )
