@@ -32,8 +32,9 @@ const HomeScreen = ({navigation}) => {
     console.log(search)
   }, [search])
 
-  const PropertyDetailScreen = () => {
-    navigation.navigate('HomeDetailsStack')
+  const PropertyDetailScreen = (zpid) => {
+    console.log(zpid)
+    navigation.navigate('HomeDetailsStack', {zpid: zpid})
   }
 
   return (

@@ -11,19 +11,17 @@ const PropertyTile = (props) => {
     PropertyDetailScreen
   } = props
 
-  console.log(item)
 
   let deviceWidth = Dimensions.get('window').width - 16
   var aspectHeight = (deviceWidth / 1.78) + 1
 
   const propAddress = formatSingleStringAddress(item.address)
-  console.log(propAddress)
   const propertyAddress1 = propAddress[0]
   const propertyAddress2 = propAddress[1] + ', ' + propAddress[2]
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => {PropertyDetailScreen()}}>
+      <TouchableOpacity onPress={() => {PropertyDetailScreen(item.zpid)}}>
         <View style={[styles.imageContainer,{height: aspectHeight}]}>
           <Image style={styles.mainImage} source={{uri: item.imgSrc}}/>
         </View>
@@ -57,7 +55,7 @@ const PropertyTile = (props) => {
             </View>
           </View>
           <View style={styles.disclaimerContainer}>
-            <Text style={styles.disclaimer}>*** 30 year fixed, 20% down, 3.14% interest rate | $3,443 rent ***</Text>
+            <Text style={styles.disclaimer}>*** 30 year fixed, 20% down, 3.14% interest rate ***</Text>
           </View>
         </View>
       </TouchableOpacity>
