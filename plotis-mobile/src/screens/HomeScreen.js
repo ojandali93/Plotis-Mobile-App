@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 
 import PropertyTile from '../components/PropertyTile.js'
@@ -8,7 +8,6 @@ import { generalOptions } from '../api/zillowApi.js'
 import axios from 'axios';
 
 const HomeScreen = ({navigation}) => {
-  const properties = [{key: 1}, {key: 2}, {key: 3}]
 
   const [search, setSearch] = useState('')
   const [results, setResults] = useState([])
@@ -23,10 +22,6 @@ const HomeScreen = ({navigation}) => {
         console.error(error);
       });
   }, [])
-
-  useEffect(() => {
-    // console.log(results)
-  }, [results])
 
   useEffect(() => {
     console.log(search)

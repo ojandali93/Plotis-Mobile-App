@@ -5,7 +5,14 @@ import { ScrollView } from 'react-native-gesture-handler'
 
 import { propertyOptions } from '../api/zillowApi'
 
+import SummaryComponent from '../components/SummaryComponent'
+import DetailsComponent from '../components/DetailsComponent'
+import PropertyValueComponent from '../components/PropertyValueComponent'
+import TaxHistoryComponent from '../components/TaxHistoryComponent'
+
 import { convertToDollars, convertEpochToDate } from '../utilities'
+
+import { calculateLoanAmount, downPaymentPercent, downPaymentAmount, calculateClosingCost, calculateMortgagePayment } from '../metrics'
 
 import axios from 'axios';
 
@@ -19,6 +26,13 @@ const PropertyDetail = (props) => {
   const [propertyAddress, setPropertyAddress] = useState('')
   const [taxHistory, setTaxHistory] = useState([])
   const [priceHistory, setPriceHistory] = useState([])
+  const [loadedProperty, setLoadedProperty] = useState(false)
+
+  const [dpAmount, setDPAmount] = useState(0)
+  const [dpPercent, setDPPercent] = useState(0)
+  const [loanAmount, setLoanAmount] = useState(0)
+  const [closingCost, setClosingCost] = useState(0)
+  const [pandi, setPANDI] = useState(0)
 
   let zpid = route.params.zpid
 
@@ -34,35 +48,45 @@ const PropertyDetail = (props) => {
     axios.request(options)
       .then(function (response) {
         setProperty(response.data)
+        setTaxHistory(response.data.taxHisotry)
+        setPriceHistory(response.data.priceHistory)
+        setLoadedProperty(true)
       }).catch(function (error) {
         console.error(error);
       });
   }, [])
 
-  const createTaxHistory = (taxHistory) => {
-    let taxHistoryList = []
-    for(let i = 0; i < 5; i++){
-      console.log('tax: ', taxHistory[i])
-      taxHistoryList.push(taxHistory[i])
-    }
-    setTaxHistory(taxHistoryList)
-  }
+  // const createTaxHistory = (taxHistory) => {
+  //   console.log(taxHistory)
+  //   let taxHistoryList = []
+  //   for(let i = 0; i < 5; i++){
+  //     taxHistoryList.push(taxHistory[i])
+  //   }
+  //   setTaxHistory(taxHistoryList)
+  // }
 
-  const createPriceHistory = (priceHistory) => {
-    let priceHistoryList = []
-    for(let i = 0; i < 5; i++){
-      priceHistoryList.push(priceHistory[i])
-    }
-    setPriceHistory(priceHistoryList)
-  }
+  // const createPriceHistory = (priceHistory) => {
+  //   let priceHistoryList = []
+  //   for(let i = 0; i < 5; i++){
+  //     priceHistoryList.push(priceHistory[i])
+  //   }
+  //   setPriceHistory(priceHistoryList)
+  // }
 
   useEffect(() => {
-    setLoading(true)
     const fullAddress = property.streetAddress + '. ' + property.city + ', ' + property.state + ' ' + property.zipcode
     setPropertyAddress(fullAddress)
-    createTaxHistory(property.taxHistory)
-    createPriceHistory(property.priceHistory)
-  }, [property])
+    setLoading(true)
+  }, [loadedProperty])
+
+  const setMortgageInfo = () => {
+    let downPercent = .2
+    setDPAmount(downPaymentAmount(property.price, downPercent))
+    // setDPPercent(downPaymentPercent(property.price, dpAmount))
+    // setLoanAmount(calculateLoanAmount(property.price, dpAmount))
+    // setClosingCost(calculateClosingCost(loanAmount))
+    // setPANDI(calculateMortgagePayment(loanAmount, property.mortgageRates.thirtyYearFixedRate))
+  }
 
   const carouselImages = [
     {
@@ -96,114 +120,27 @@ const PropertyDetail = (props) => {
         <Image style={styles.mainImage} source={{uri: property.imgSrc}}/>
       </View>
       <View style={styles.carouselContainer} className="image-carousel-image">
-        <FlatList 
+        {/* <FlatList 
           horizontal
           data={carouselImages}
           renderItem={({item}) => <Image style={{height: carouselImageHeight, width:carouselImageWidth}} source={require('../../assets/luxury-home-1.jpeg')}/>}
-        />
+        /> */}
       </View>
     </View>
 
-    <View style={styles.contentContainer}>
-      <View style={styles.priceContainer}>
-        <Text style={styles.price}>${convertToDollars(property.price)}</Text>
-        <Text>{property.homeStatus}</Text>
-      </View>
-      <View>
-        <Text>{propertyAddress}</Text>
-      </View>
-      <View style={styles.summaryContainer}>
-        <Text>{property.bedrooms} Bed | {property.bathrooms} Bath | {convertToDollars(property.livingArea)} Sqft.</Text>
-        <Text>{property.homeType}</Text>
-      </View>
-    </View>  
+    {/* <SummaryComponent property={property} propertyAddress={propertyAddress}/> */}
 
     <View style={styles.seperate}></View>
-
-    <View style={styles.infoContainer}>
-      <View style={styles.infoView}>
-        <Text style={styles.info}>Listed: {property.timeOnZillow}</Text>
-        <Text style={styles.info}>Year Built: {property.resoFacts.yearBuilt}</Text>
-      </View>
-      <View style={styles.infoView}>
-        <Text style={styles.info}>Living Space: {property.resoFacts.livingArea}</Text>
-        <Text style={styles.info}>Lot Size: {property.resoFacts.lotSize}</Text>
-      </View>
-      <View style={styles.infoView}>
-        <Text style={styles.info}>Price / Sqft: ${convertToDollars(property.resoFacts.pricePerSquareFoot)}</Text>
-        <Text style={styles.info}>HOA Fee : ${
-          property.monthlyHoaFee == null ? 0 : property.monthlyHoaFee
-        } </Text>
-      </View>
-      <View style={styles.infoView}>
-        <Text style={styles.info}>Parking Spaces: {property.resoFacts.garageSpaces}</Text>
-        <Text style={styles.info}>Levels: {property.resoFacts.levels}</Text>
-      </View>
-      <View style={styles.infoView}>
-        <Text style={styles.info}>Heating: {
-          property.resoFacts.hasHeating == true ? <Text>Included</Text> : <Text>Not Included</Text>
-        }</Text>
-        <Text style={styles.info}>Air Conditioning: {
-          property.resoFacts.hasCooling == true ? <Text>Included</Text> : <Text>Not Included</Text>
-        }</Text>
-      </View>
-      <View style={styles.infoView}>
-        <Text style={styles.info}>MLS Id: {property.mlsid}</Text>
-        <Text style={styles.info}>Brokerage: {property.brokerageName}</Text>
-      </View>
-    </View> 
+  
+    {/* <DetailsComponent property={property} /> */}
 
     <View style={styles.seperate}></View> 
 
-    <View style={styles.priceHistoryContainer}>
-      <View>
-        <Text>Projected Market Value ${convertToDollars(property.zestimate)}</Text>
-      </View>
-      <View style={styles.eventContainer}>
-        <Text>Date</Text>
-        <Text>Event</Text>
-        <Text>Price</Text>
-      </View>
-      <FlatList 
-        data={priceHistory}
-        key={priceHistory.time}
-        renderItem={({item}) => {
-          return(
-            <View style={styles.eventContainer}>
-              <Text>{item.date}</Text>
-              <Text>{item.event}</Text>
-              <Text>${convertToDollars(item.price)}</Text>
-            </View>
-          )
-        }}
-      />
-    </View>
+    {/* <PropertyValueComponent property={property} priceHistory={priceHistory}/> */}
 
     <View style={styles.seperate}></View> 
 
-    <View style={styles.taxHistoryContainer}>
-      <View>
-        <Text>Projected Market Value $1,400,000</Text>
-      </View>
-      <View style={styles.eventContainer}>
-        <Text>Year</Text>
-        <Text>Tax($)</Text>
-        <Text>Assessment</Text>
-      </View>
-      <FlatList 
-        data={taxHistory}
-        key={taxHistory.time}
-        renderItem={({item}) => {
-          return (
-            <View style={styles.eventContainer}>
-              <Text>{convertEpochToDate(item.time)}</Text>
-              <Text>{item.taxPaid}</Text>
-              <Text>${convertToDollars(item.value)}</Text>
-            </View>
-          )
-        }}
-      />
-    </View>
+    {/* <TaxHistoryComponent property={property} taxHistory={taxHistory}/> */}
 
     <View style={styles.seperate}></View> 
 
@@ -213,7 +150,7 @@ const PropertyDetail = (props) => {
       </View>
       <View style={styles.expense}>
         <Text>Principle & Interest:</Text>
-        <Text>$1,938</Text>
+        <Text>${pandi}</Text>
       </View>
       <View style={styles.expense}>
         <Text>Mortgage Insurance:</Text>

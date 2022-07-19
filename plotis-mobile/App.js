@@ -10,6 +10,7 @@ import MessagesScreen from './src/screens/MessagesScreen.js';
 import ThreadScreen from './src/screens/ThreadScreen.js';
 import ProfileScreen from './src/screens/ProfileScreen.js';
 import RecommendedScreen from './src/screens/RecommendedScreen.js';
+import DetailScreen from './src/screens/DetailScreen.js';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -18,7 +19,7 @@ const HomeStack = () => {
   return (
     <StackNav.Navigator initialRouteName='Home'>
       <StackNav.Screen name="HomeStack" component={HomeScreen}/>
-      <StackNav.Screen name="HomeDetailsStack" component={PropertyDetail} />
+      <StackNav.Screen name="HomeDetailsStack" component={DetailScreen} />
      </StackNav.Navigator>
   )
 }
