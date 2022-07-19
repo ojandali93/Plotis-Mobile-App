@@ -1,6 +1,8 @@
 import React from 'react'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 
+import { convertEpochToDate, convertToDollars } from '../utilities'
+
 const TaxHistoryComponent = (props) => {
   const {
     property,

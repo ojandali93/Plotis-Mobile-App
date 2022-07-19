@@ -1,7 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Dimensions } from 'react-native'
 import {Text, View, StyleSheet, TouchableOpacity, Button, Image, FlatList, ScrollView} from 'react-native'
 
+import SummaryComponent from '../components/SummaryComponent'
+import DetailsComponent from '../components/DetailsComponent'
+import PropertyValueComponent from '../components/PropertyValueComponent'
+import TaxHistoryComponent from '../components/TaxHistoryComponent'
+
 import { propertyOptions } from '../api/zillowApi'
+
+import { convertEpochToDate } from '../utilities'
 
 import axios from 'axios';
 
@@ -12,8 +20,16 @@ const DetailScreen = (props) => {
 
   const [property, setProperty] = useState(route.params.property)
   const [loadedData, setLoadedData] = useState(false)
+  const [propertyAddress, setPropertyAddress] = useState('')
+  const [priceHistory, setPriceHistory] = useState([])
+  const [taxHistory, setTaxHistory] = useState([])
 
   const isMounted = useRef(false)
+
+  let deviceWidth = Dimensions.get('window').width
+  var aspectHeight = (deviceWidth / 1.78) + 1
+  let carouselImageWidth = (deviceWidth / 4)
+  let carouselImageHeight = (carouselImageWidth / 1.78) 
 
   let zpid = route.params.zpid
 
@@ -24,6 +40,8 @@ const DetailScreen = (props) => {
     axios.request(options)
       .then(function (response) {
         setProperty(response.data)
+        createPriceHistory(response.data.priceHistory)
+        createTaxHistory(response.data.taxHistory)
       }).catch(function (error) {
         console.error(error);
       });
@@ -31,12 +49,30 @@ const DetailScreen = (props) => {
 
   useEffect(() => {
     if (isMounted.current) {
+      const fullAddress = property.streetAddress + '. ' + property.city + ', ' + property.state + ' ' + property.zipcode
+      setPropertyAddress(fullAddress)
       setLoadedData(true)
     } else {
       isMounted.current = true;
     }
   }, [property]);
 
+  const createPriceHistory = (priceHistory) => {
+    let priceHistoryList = []
+    for(let i = 0; i < 5; i++){
+      priceHistoryList.push(priceHistory[i])
+    }
+    setPriceHistory(priceHistoryList)
+  }
+
+  const createTaxHistory = (taxHistory) => {
+    console.log(taxHistory)
+    let taxHistoryList = []
+    for(let i = 0; i < 5; i++){
+      taxHistoryList.push(taxHistory[i])
+    }
+    setTaxHistory(taxHistoryList)
+  }
 
   const loadingScreen = () => {
     return(
@@ -49,39 +85,34 @@ const DetailScreen = (props) => {
   const loadedScreen = () => {
     return(
       <ScrollView>
-        <View style={styles.taxHistoryContainer}>
-          <View style={styles.totalExpenses}>
-            <Text>Expected Monthly Expenses: $2,112</Text>
+        <View style={styles.imagesContainer} className="images-container">
+          <View style={[styles.mainImageContainer,{height: aspectHeight}]} className="main-image-container">
+            <Image style={styles.mainImage} source={{uri: property.imgSrc}}/>
           </View>
-          <View style={styles.expense}>
-            <Text>Principle & Interest:</Text>
-            <Text>$0</Text>
-          </View>
-          <View style={styles.expense}>
-            <Text>Mortgage Insurance:</Text>
-            <Text>$1,938</Text>
-          </View>
-          <View style={styles.expense}>
-            <Text>Property Tax (Monthly):</Text>
-            <Text>$1,938</Text>
-          </View>
-          <View style={styles.expense}>
-            <Text>Home Insurance:</Text>
-            <Text>$1,938</Text>
-          </View>
-          <View style={styles.expense}>
-            <Text>HOA Fee's:</Text>
-            <Text>$1,938</Text>
-          </View>
-          <View style={styles.expense}>
-            <Text>Utilities:</Text>
-            <Text>$1,938</Text>
-          </View>
-          <View style={styles.expense}>
-            <Text>Additional Expenses:</Text>
-            <Text>$1,938</Text>
+          <View style={styles.carouselContainer} className="image-carousel-image">
+            {/* <FlatList 
+              horizontal
+              data={carouselImages}
+              renderItem={({item}) => <Image style={{height: carouselImageHeight, width:carouselImageWidth}} source={require('../../assets/luxury-home-1.jpeg')}/>}
+            /> */}
           </View>
         </View>
+
+        <SummaryComponent property={property} propertyAddress={propertyAddress}/>
+
+        <View style={styles.seperate}></View>
+
+        <DetailsComponent property={property} />
+
+        <View style={styles.seperate}></View>
+
+        <PropertyValueComponent property={property} priceHistory={priceHistory}/>
+
+        <View style={styles.seperate}></View> 
+
+        <TaxHistoryComponent property={property} taxHistory={taxHistory}/>
+
+        <View style={styles.seperate}></View> 
       </ScrollView>
     )
   }
@@ -96,7 +127,34 @@ const DetailScreen = (props) => {
 }
 
 const styles = StyleSheet.create({
-
+  container: {
+    width: '100%',
+    overflow: 'hidden',
+  },
+  imagesContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%'
+  },
+  mainImageContainer: {
+    width: '100%',
+    overflow: 'hidden',
+  },
+  mainImage: {
+    width: '100%',
+    height: '100%'
+  },
+  carouselContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  seperate: {
+    height: 2,
+    width: '100%',
+    backgroundColor: 'black',
+    marginVertical: 8
+  },
 })
 
 export default DetailScreen
