@@ -56,22 +56,22 @@ const PropertyDetail = (props) => {
       });
   }, [])
 
-  // const createTaxHistory = (taxHistory) => {
-  //   console.log(taxHistory)
-  //   let taxHistoryList = []
-  //   for(let i = 0; i < 5; i++){
-  //     taxHistoryList.push(taxHistory[i])
-  //   }
-  //   setTaxHistory(taxHistoryList)
-  // }
+  const createTaxHistory = (taxHistory) => {
+    console.log(taxHistory)
+    let taxHistoryList = []
+    for(let i = 0; i < 5; i++){
+      taxHistoryList.push(taxHistory[i])
+    }
+    setTaxHistory(taxHistoryList)
+  }
 
-  // const createPriceHistory = (priceHistory) => {
-  //   let priceHistoryList = []
-  //   for(let i = 0; i < 5; i++){
-  //     priceHistoryList.push(priceHistory[i])
-  //   }
-  //   setPriceHistory(priceHistoryList)
-  // }
+  const createPriceHistory = (priceHistory) => {
+    let priceHistoryList = []
+    for(let i = 0; i < 5; i++){
+      priceHistoryList.push(priceHistory[i])
+    }
+    setPriceHistory(priceHistoryList)
+  }
 
   useEffect(() => {
     const fullAddress = property.streetAddress + '. ' + property.city + ', ' + property.state + ' ' + property.zipcode
@@ -128,19 +128,19 @@ const PropertyDetail = (props) => {
       </View>
     </View>
 
-    {/* <SummaryComponent property={property} propertyAddress={propertyAddress}/> */}
+    <SummaryComponent property={property} propertyAddress={propertyAddress}/>
 
     <View style={styles.seperate}></View>
   
-    {/* <DetailsComponent property={property} /> */}
+    <DetailsComponent property={property} />
 
     <View style={styles.seperate}></View> 
 
-    {/* <PropertyValueComponent property={property} priceHistory={priceHistory}/> */}
+    <PropertyValueComponent property={property} priceHistory={priceHistory}/>
 
     <View style={styles.seperate}></View> 
 
-    {/* <TaxHistoryComponent property={property} taxHistory={taxHistory}/> */}
+    <TaxHistoryComponent property={property} taxHistory={taxHistory}/>
 
     <View style={styles.seperate}></View> 
 

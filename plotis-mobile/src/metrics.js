@@ -3,14 +3,14 @@ const calculateLoanAmount = (price, downPayment) => {
   return loaAmount
 }
 
-const downPaymentPercent = (price, amountDown) => {
+const calculateDownPaymentPercent = (price, amountDown) => {
   let downPayment = amountDown / price
   return downPayment.toFixed(2)
 }
 
-const downPaymentAmount = (price, percentDown) => {
+const calculateDownPaymentAmount = (price, percentDown) => {
   let downPayment = price * percentDown
-  return downPayment.toFixed(2)
+  return Math.round(downPayment)
 }
 
 const calculateClosingCost = (loanAmount) => {
@@ -25,10 +25,17 @@ const calculateMortgagePayment = (loanAmount, ir) => {
   return monthlyPayment.toFixed(2)
 }
 
+const calculatePropertyTax = (price, taxRate) => {
+  let yearlyTax = price * (taxRate / 100) 
+  let monthlyTax = yearlyTax / 12 
+  return parseInt(Math.round(monthlyTax))
+}
+
 module.exports = {
   calculateLoanAmount,
-  downPaymentPercent,
-  downPaymentAmount,
+  calculateDownPaymentPercent,
+  calculateDownPaymentAmount,
   calculateClosingCost,
-  calculateMortgagePayment
+  calculateMortgagePayment,
+  calculatePropertyTax
 } 

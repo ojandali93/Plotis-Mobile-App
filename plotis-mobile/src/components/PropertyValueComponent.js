@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 
-import { convertToDollars } from '../utilities'
+import { convertToDollars, convertEpochToDate } from '../utilities'
 
 const PropertyValueComponent = (props) => {
   const {

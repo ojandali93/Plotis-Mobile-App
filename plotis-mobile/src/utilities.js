@@ -21,9 +21,7 @@ const buildAddres = (street, city, state, zip) => {
 }
 
 const convertEpochToDate = (timestamp) => {
-  console.log(new Date(timestamp))
   let convertedDate = new Date(timestamp)
-  console.log(typeof(convertedDate.toString()))
   let stringDate = convertedDate.toString()
   let fullDate = stringDate.split(' ')
   return fullDate[3]

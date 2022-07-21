@@ -6,6 +6,9 @@ import SummaryComponent from '../components/SummaryComponent'
 import DetailsComponent from '../components/DetailsComponent'
 import PropertyValueComponent from '../components/PropertyValueComponent'
 import TaxHistoryComponent from '../components/TaxHistoryComponent'
+import ExpensesComponent from '../components/ExpensesComponent'
+
+import { calculateMortgagePayment } from '../metrics'
 
 import { propertyOptions } from '../api/zillowApi'
 
@@ -59,14 +62,26 @@ const DetailScreen = (props) => {
 
   const createPriceHistory = (priceHistory) => {
     let priceHistoryList = []
-    for(let i = 0; i < 5; i++){
-      priceHistoryList.push(priceHistory[i])
+    if(priceHistory.length <= 5 && priceHistory.length > 0){
+      setPriceHistory(priceHistory)
+    } 
+    if(priceHistory.length == 0){
+      let currentPriceHistory = [{
+        'date': '2022-07-15',
+        'event': 'List For Sale',
+        'price': property.price
+      }]
+      setPriceHistory(currentPriceHistory)
     }
-    setPriceHistory(priceHistoryList)
+    if(priceHistory.length > 5){
+      for(let i = 0; i < 5; i++){
+        priceHistoryList.push(priceHistory[i])
+      }
+      setPriceHistory(priceHistoryList)
+    }
   }
 
   const createTaxHistory = (taxHistory) => {
-    console.log(taxHistory)
     let taxHistoryList = []
     for(let i = 0; i < 5; i++){
       taxHistoryList.push(taxHistory[i])
@@ -112,7 +127,15 @@ const DetailScreen = (props) => {
 
         <TaxHistoryComponent property={property} taxHistory={taxHistory}/>
 
-        <View style={styles.seperate}></View> 
+        <View style={styles.seperate}></View>
+
+        <ExpensesComponent 
+          property={property}
+          
+        />
+
+        <View style={styles.seperate}></View>
+        
       </ScrollView>
     )
   }
