@@ -37,7 +37,6 @@ const DetailsComponent = (props) => {
         }</Text>
       </View>
       <View style={styles.infoView}>
-        <Text style={styles.info}>MLS Id: {property.mlsid}</Text>
         <Text style={styles.info}>Brokerage: {property.brokerageName}</Text>
       </View>
     </View> 

@@ -17,7 +17,8 @@ import EditAdditionaExpenses from './ExpensesEdits/EditAdditionaExpenses'
 
 const ExpensesComponent = (props) => {
   const {
-    property
+    property,
+    setTotalOverallExpenses,
   } = props
 
   const [editMortgage, setEditMortgage] = useState(false)
@@ -252,6 +253,7 @@ const ExpensesComponent = (props) => {
 
   const calculateTotalExpenses = () => {
     let totalExp = parseInt(monthlyMortgage) + parseInt(monthlyTax) + parseInt(homeInsuranceMonthly) + parseInt(hoa) + parseInt(utilities) + parseInt(additionaExpenses)
+    setTotalOverallExpenses(totalExp)
     setTotalMonthlyExpenses(totalExp)
   }
 

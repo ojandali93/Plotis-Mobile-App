@@ -7,6 +7,7 @@ import DetailsComponent from '../components/DetailsComponent'
 import PropertyValueComponent from '../components/PropertyValueComponent'
 import TaxHistoryComponent from '../components/TaxHistoryComponent'
 import ExpensesComponent from '../components/ExpensesComponent'
+import RevenueComponent from '../components/RevenueComponent'
 
 import { calculateMortgagePayment } from '../metrics'
 
@@ -26,6 +27,9 @@ const DetailScreen = (props) => {
   const [propertyAddress, setPropertyAddress] = useState('')
   const [priceHistory, setPriceHistory] = useState([])
   const [taxHistory, setTaxHistory] = useState([])
+
+  const [totalOverallExpenses, setTotalOverallExpenses] = useState(0)
+  const [totalOverallRevenue, setTotalOverallRevenue] = useState()
 
   const isMounted = useRef(false)
 
@@ -131,8 +135,14 @@ const DetailScreen = (props) => {
 
         <ExpensesComponent 
           property={property}
-          
+          setTotalOverallExpenses={setTotalOverallExpenses}
         />
+
+        <View style={styles.seperate}></View>
+
+        <RevenueComponent 
+          property={property}
+          setTotalOverallRevenue={setTotalOverallRevenue}/>
 
         <View style={styles.seperate}></View>
         
