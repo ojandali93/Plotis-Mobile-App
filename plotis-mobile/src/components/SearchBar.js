@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Feather from 'react-native-vector-icons/Feather'
 
@@ -8,7 +8,7 @@ import Feather from 'react-native-vector-icons/Feather'
 const SearchBar = (props) => {
 
   const {
-    search, setSearch
+    search, setSearch, newSearch
   } = props
 
   return (
@@ -22,6 +22,9 @@ const SearchBar = (props) => {
           defaultValue={search}
         />
       </View>
+      <TouchableOpacity onPress={() => {newSearch()}}>
+        <Text style={styles.searchSubmit}>Search</Text>
+      </TouchableOpacity>
       <Feather style={styles.icon} size={20} name='grid'/>
     </View>
   )
@@ -42,9 +45,12 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     borderBottomColor: 'black',
-    width: '100%',
+    width: '85%',
     borderBottomWidth: 2,
     fontSize: 22,
+  },
+  searchSubmit: {
+    paddingTop: 6
   },
   icon:{
     paddingHorizontal: 8,
