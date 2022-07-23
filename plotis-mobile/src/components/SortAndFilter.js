@@ -137,7 +137,6 @@ const SortAndFilter = (props) => {
                                         <Picker.Item label="Price (High to Low)" value="Price_High_Low" />
                                         <Picker.Item label="Price (Low to High)" value="Price_Low_High" />
                                         <Picker.Item label="Newest" value="Newest" />
-                                        <Picker.Item label="Home For You" value="Home_For_You" />
                                         <Picker.Item label="Bedrooms" value="Bedrooms" />
                                         <Picker.Item label="Bathrooms" value="Bathrooms" />
                                         <Picker.Item label="Square Feet" value="Square_Feet" />

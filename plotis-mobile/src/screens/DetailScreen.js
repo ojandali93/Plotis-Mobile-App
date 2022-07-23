@@ -8,6 +8,8 @@ import PropertyValueComponent from '../components/PropertyValueComponent'
 import TaxHistoryComponent from '../components/TaxHistoryComponent'
 import ExpensesComponent from '../components/ExpensesComponent'
 import RevenueComponent from '../components/RevenueComponent'
+import InvestmentMetrics from '../components/InvestmentMetrics'
+
 
 import { calculateMortgagePayment } from '../metrics'
 
@@ -29,7 +31,11 @@ const DetailScreen = (props) => {
   const [taxHistory, setTaxHistory] = useState([])
 
   const [totalOverallExpenses, setTotalOverallExpenses] = useState(0)
-  const [totalOverallRevenue, setTotalOverallRevenue] = useState()
+  const [totalOverallRevenue, setTotalOverallRevenue] = useState(0)
+  const [totalPrincipalAndInterest, setTotalPrincipalAndInterest]= useState(0)
+  const [totalDownPayment, setTotalDownPayment] = useState(0)
+
+  const [totalExpWithoutMortgage, setTotalExpWithoutMortgage] = useState(0)
 
   const isMounted = useRef(false)
 
@@ -133,18 +139,30 @@ const DetailScreen = (props) => {
 
         <View style={styles.seperate}></View>
 
-        <ExpensesComponent 
-          property={property}
-          setTotalOverallExpenses={setTotalOverallExpenses}
-        />
-
-        <View style={styles.seperate}></View>
-
         <RevenueComponent 
           property={property}
           setTotalOverallRevenue={setTotalOverallRevenue}/>
 
         <View style={styles.seperate}></View>
+
+        <ExpensesComponent 
+          property={property}
+          setTotalOverallExpenses={setTotalOverallExpenses}
+          setTotalPrincipalAndInterest={setTotalPrincipalAndInterest}
+          setTotalDownPayment={setTotalDownPayment}
+          setTotalExpWithoutMortgage={setTotalExpWithoutMortgage}
+        />
+
+        <View style={styles.seperate}></View>
+
+        <InvestmentMetrics 
+          property={property}
+          totalOverallExpenses={totalOverallExpenses}
+          totalOverallRevenue={totalOverallRevenue}
+          totalPrincipalAndInterest={totalPrincipalAndInterest}
+          totalDownPayment={totalDownPayment}
+          totalExpWithoutMortgage={totalExpWithoutMortgage}
+        />
         
       </ScrollView>
     )

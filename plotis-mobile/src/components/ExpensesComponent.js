@@ -19,6 +19,9 @@ const ExpensesComponent = (props) => {
   const {
     property,
     setTotalOverallExpenses,
+    setTotalPrincipalAndInterest,
+    setTotalDownPayment,
+    setTotalExpWithoutMortgage
   } = props
 
   const [editMortgage, setEditMortgage] = useState(false)
@@ -52,6 +55,19 @@ const ExpensesComponent = (props) => {
 
   const [totalMonthlyExpenses, setTotalMonthlyExpenses] = useState(0)
 
+  const [gasMonthly, setGasMonthly] = useState(0)
+  const [sewerMonthly, setSewerMonthly] = useState(0)
+  const [waterMonthly, setWaterMonthly] = useState(0)
+  const [electricMonthly, setElectricMonthly] = useState(0)
+
+  const [internetMonthly, setInternetMonthly] = useState(0)
+  const [maintenanceMonthly, setMaintenanceMonthly] = useState(0)
+  const [vacancyMOnhtly, setVacancyMonthly] = useState(0)
+  const [managementMonthyl, setManagementMonthly] = useState(0)
+  const [repairsMonthly, setRetpairsMonthly] = useState(0)
+  const [homeWarrantlyMonthly, setHomeWarrantlyMonthly] = useState(0)
+  const [extraExpenses, setExtraExpenses] = useState(0)
+
   const isMounted = useRef(false)
   const isMonthlyExpenses = useRef(false)
   const isHOA = useRef(false)
@@ -83,6 +99,7 @@ const ExpensesComponent = (props) => {
 
   useEffect(() => {
     setDownPaymentAmount(calculateDownPaymentAmount(homePrice, downPaymentPercent))
+    setTotalDownPayment(calculateDownPaymentAmount(homePrice, downPaymentPercent))
   }, [homePrice])
 
   useEffect(() => {
@@ -100,10 +117,12 @@ const ExpensesComponent = (props) => {
 
   useEffect(() => {
     setMonthlyMortgage(calculateMortgagePayment(loanAmount, interestRate))
+    setTotalPrincipalAndInterest(calculateMortgagePayment(loanAmount, interestRate))
   }, [loanAmount])
 
   useEffect(() => {
     setMonthlyMortgage(calculateMortgagePayment(loanAmount, interestRate))
+    setTotalPrincipalAndInterest(calculateMortgagePayment(loanAmount, interestRate))
   }, [interestRate])
 
   useEffect(() => {
@@ -112,23 +131,48 @@ const ExpensesComponent = (props) => {
 
   useEffect(() => {
     calculateTotalExpenses()
+    calculateTotalExpenseWithoutMortgage()
   }, [monthlyTax])
 
   useEffect(() => {
     calculateTotalExpenses()
+    calculateTotalExpenseWithoutMortgage()
   }, [hoa])
 
   useEffect(() => {
     calculateTotalExpenses()
+    calculateTotalExpenseWithoutMortgage()
   }, [utilities])
 
   useEffect(() => {
     calculateTotalExpenses()
+    calculateTotalExpenseWithoutMortgage()
   }, [additionaExpenses])
 
   useEffect(() => {
     calculateTotalExpenses()
+    calculateTotalExpenseWithoutMortgage()
   }, [homeInsuranceMonthly])
+
+  useEffect(() => {
+    setUtilities(gasMonthly + waterMonthly + electricMonthly + sewerMonthly)
+  }, [gasMonthly])
+  
+  useEffect(() => {
+    setUtilities(gasMonthly + waterMonthly + electricMonthly + sewerMonthly)
+  }, [waterMonthly])
+
+  useEffect(() => {
+    setUtilities(gasMonthly + waterMonthly + electricMonthly + sewerMonthly)
+  }, [electricMonthly])
+
+  useEffect(() => {
+    setUtilities(gasMonthly + waterMonthly + electricMonthly + sewerMonthly)
+  }, [sewerMonthly])
+
+  useEffect(() => {
+    setAdditionalExpenses(internetMonthly + maintenanceMonthly + managementMonthyl + vacancyMOnhtly + repairsMonthly + repairsMonthly + homeWarrantlyMonthly + extraExpenses)
+  }, [internetMonthly, maintenanceMonthly, managementMonthyl, vacancyMOnhtly, repairsMonthly, homeWarrantlyMonthly, extraExpenses])
 
   const editHomePrice = (value) => {
     let price = parseInt(value)
@@ -187,14 +231,6 @@ const ExpensesComponent = (props) => {
     }
   }
 
-  const updateAdditionaExpenses = (value) => {
-    if(value == ''){
-      setAdditionalExpenses(0)
-    } else {
-      setAdditionalExpenses(parseInt(value))
-    }
-  }
-
   const editingMortgage = () => {
     if(editMortgage == false){
       setEditMortgage(true)
@@ -236,10 +272,109 @@ const ExpensesComponent = (props) => {
   }
 
   const editingUtlities = () => {
-    if(editingAdditionalExpenses == false){
+    if(editUtilities == false){
       setEditUtilities(true)
     } else {
       setEditUtilities(false)
+    }
+  }
+
+  const updateGasMonthly = (value) => {
+    if(value == ''){
+      setGasMonthly(0)
+    } else {
+      let newValue = parseInt(value)
+      setGasMonthly(newValue)
+    }
+  }
+
+  const updateElectricMonthly = (value) => {
+    if(value == ''){
+      setElectricMonthly(0)
+    } else {
+      let newValue = parseInt(value)
+      setElectricMonthly(newValue)
+    }
+  }
+
+  const updateSewerMonthly = (value) => {
+    if(value == ''){
+      setSewerMonthly(0)
+    } else {
+      let newValue = parseInt(value)
+      setSewerMonthly(newValue)
+    }
+  }
+
+  const updateWaterMonthly = (value) => {
+    if(value == ''){
+      setWaterMonthly(0)
+    } else {
+      let newValue = parseInt(value)
+      setWaterMonthly(newValue)
+    }
+  }
+
+  const updateInternetMonthly = (value) => {
+    if(value == ''){
+      setInternetMonthly(0)
+    } else {
+      let newValue = parseInt(value)
+      setInternetMonthly(newValue)
+    }
+  }
+
+  const updateMaintenenceMonthly = (value) => {
+    if(value == ''){
+      setMaintenanceMonthly(0)
+    } else {
+      let newValue = parseInt(value)
+      setMaintenanceMonthly(newValue)
+    }
+  }
+
+  const updateManagementMonthly = (value) => {
+    if(value == ''){
+      setManagementMonthly(0)
+    } else {
+      let newValue = parseInt(value)
+      setManagementMonthly(newValue)
+    }
+  }
+
+  const updateVacancyMonthly = (value) => {
+    if(value == ''){
+      setVacancyMonthly(0)
+    } else {
+      let newValue = parseInt(value)
+      setVacancyMonthly(newValue)
+    }
+  }
+
+  const updateRepairMonthly = (value) => {
+    if(value == ''){
+      setRetpairsMonthly(0)
+    } else {
+      let newValue = parseInt(value)
+      setRetpairsMonthly(newValue)
+    }
+  }
+
+  const updateHomeWarranty = (value) => {
+    if(value == ''){
+      setHomeWarrantlyMonthly(0)
+    } else {
+      let newValue = parseInt(value)
+      setHomeWarrantlyMonthly(newValue)
+    }
+  }
+
+  const updateExtraExpenses = (value) => {
+    if(value == ''){
+      setExtraExpenses(0)
+    } else {
+      let newValue = parseInt(value)
+      setExtraExpenses(newValue)
     }
   }
 
@@ -249,6 +384,12 @@ const ExpensesComponent = (props) => {
     } else {
       setEditAddtionalExpenses(false)
     }
+  }
+
+  const calculateTotalExpenseWithoutMortgage = () => {
+    console.log(parseInt(monthlyTax))
+    let totalExp = parseInt(monthlyTax) + parseInt(homeInsuranceMonthly) + parseInt(hoa) + parseInt(utilities) + parseInt(additionaExpenses)
+    setTotalExpWithoutMortgage(totalExp)
   }
 
   const calculateTotalExpenses = () => {
@@ -337,7 +478,18 @@ const ExpensesComponent = (props) => {
       </TouchableOpacity>
       <View>
         {
-          editUtilities == false ? null : <EditUtilities updateUtilities={updateUtilities} utilities={utilities}/>
+          editUtilities == false ? null : <EditUtilities 
+                                            updateUtilities={updateUtilities} 
+                                            utilities={utilities}
+                                            gasMonthly={gasMonthly}
+                                            updateGasMonthly={updateGasMonthly}
+                                            sewerMonthly={sewerMonthly}
+                                            updateSewerMonthly={updateSewerMonthly}
+                                            waterMonthly={waterMonthly}
+                                            updateWaterMonthly={updateWaterMonthly}
+                                            electricMonthly={electricMonthly}
+                                            updateElectricMonthly={updateElectricMonthly}
+                                            />
         }
       </View>
       <TouchableOpacity onPress={() => {currentlyEditingAdditionaExpenses()}}>
@@ -348,8 +500,21 @@ const ExpensesComponent = (props) => {
       </TouchableOpacity>
       {
         editingAdditionalExpenses == false ? null : <EditAdditionaExpenses 
-                                                  updateAdditionaExpenses={updateAdditionaExpenses}
-                                                  additionaExpenses={additionaExpenses}/>
+                                                      internetMonthly={internetMonthly}
+                                                      maintenanceMonthly={maintenanceMonthly}
+                                                      managementMonthyl={managementMonthyl}
+                                                      vacancyMOnhtly={vacancyMOnhtly}
+                                                      repairsMonthly={repairsMonthly}
+                                                      homeWarrantlyMonthly={homeWarrantlyMonthly}
+                                                      extraExpenses={extraExpenses}
+                                                      updateInternetMonthly={updateInternetMonthly}
+                                                      updateMaintenenceMonthly={updateMaintenenceMonthly}
+                                                      updateManagementMonthly={updateManagementMonthly}
+                                                      updateVacancyMonthly={updateVacancyMonthly}
+                                                      updateHomeWarranty={updateHomeWarranty}
+                                                      updateExtraExpenses={updateExtraExpenses}
+                                                      updateRepairMonthly={updateRepairMonthly}
+                                                      />
       }
     </View>
   )
