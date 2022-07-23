@@ -8,7 +8,7 @@ import Feather from 'react-native-vector-icons/Feather'
 const SearchBar = (props) => {
 
   const {
-    search, setSearch, newSearch
+    search, setSearch, newSearch, updateSortFilter
   } = props
 
   return (
@@ -25,7 +25,10 @@ const SearchBar = (props) => {
       <TouchableOpacity onPress={() => {newSearch()}}>
         <Text style={styles.searchSubmit}>Search</Text>
       </TouchableOpacity>
-      <Feather style={styles.icon} size={20} name='grid'/>
+      <TouchableOpacity onPress={() => {updateSortFilter()}}>
+        <Feather style={styles.icon} size={20} name='sliders'/>
+      </TouchableOpacity>
+      
     </View>
   )
 }

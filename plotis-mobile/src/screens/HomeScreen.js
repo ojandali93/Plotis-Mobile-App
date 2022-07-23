@@ -7,10 +7,11 @@ import { generalOptions } from '../api/zillowApi.js'
 
 import axios from 'axios';
 import LoadingBar from '../components/LoadingBar.js'
+import SortAndFilter from '../components/SortAndFilter.js'
 
 const HomeScreen = ({navigation}) => {
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState('Irvine, CA')
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
 
@@ -23,23 +24,17 @@ const HomeScreen = ({navigation}) => {
   const [maxBeds, setMaxBeds] = useState()
   const [minSqft, setMinSqft] = useState()
   const [maxSqft, setMaxSqft] = useState()
-  const [sort, setSort] = useState()
+  const [location, setLocation] = useState('Irvine, CA')
+
+  const [openSortAndFilter, setOpenSortAndFilter] = useState(false)
+
+  const [selectedSort, setSelectedSort] = useState()
 
   const [pageNumber, setPageNumber] = useState()
 
-  const homeTypeOptions = [
-    {id: 1, label: 'Home_For_You'},
-    {id: 2, label: 'Price_High_Low'},
-    {id: 3, label: 'Price_Low_High'},
-    {id: 4, label: 'Newest'},
-    {id: 5, label: 'Bedrooms'},
-    {id: 6, label: 'Bathrooms'},
-    {id: 7, label: 'Square_Feet'},
-    {id: 8, label: 'Lot_Size'}
-  ]
-
   useEffect(() => {
-    console.log('send a request')
+    console.log(search)
+    generalOptions.params.location = search
     axios.request(generalOptions)
       .then(function (response) {
         setResults(response.data.props)
@@ -50,13 +45,32 @@ const HomeScreen = ({navigation}) => {
   }, [])
 
   useEffect(() => {
-    console.log(search)
+  }, [selectedSort])
+
+  useEffect(() => {
   }, [search])
 
   useEffect(() => {
-
-    setSearch('')
   }, [results])
+
+  useEffect(() => {
+  }, [minBeds])
+  
+  useEffect(() => {
+  }, [maxBeds])
+
+  useEffect(() => {
+  }, [minBaths])
+  
+  useEffect(() => {
+  }, [maxBaths])
+
+  useEffect(() => {
+  }, [minSqft])
+
+
+  useEffect(() => {
+  }, [maxSqft])
 
   const PropertyDetailScreen = (zpid) => {
     console.log(zpid)
@@ -78,15 +92,91 @@ const HomeScreen = ({navigation}) => {
       });
   }
 
+  const updateSortFilter = () => {
+    if(openSortAndFilter == false){
+      setOpenSortAndFilter(true)
+    } else {
+      setOpenSortAndFilter(false)
+    }
+  }
+
+  const applyFilterAndSort = () => {
+    if(minPrice != undefined){
+      generalOptions.params.minPrice = minPrice
+    }
+    if(maxPrice != undefined){
+      generalOptions.params.maxPrice = maxPrice
+    }
+    if(minBaths != undefined){
+      generalOptions.params.bathsMin = minBaths
+    }
+    if(maxBaths != undefined){
+      generalOptions.params.bathsMax = maxBaths
+    }
+    if(minBeds != undefined){
+      generalOptions.params.bedsMin = minBeds
+    }
+    if(maxBeds != undefined){
+      generalOptions.params.bedsMax = maxBeds
+    }
+    if(minSqft != undefined){
+      generalOptions.params.sqftMin = minSqft
+    }
+    if(maxSqft != undefined){
+      generalOptions.params.sqftMax = maxSqft
+    }
+    if(selectedSort != undefined){
+      generalOptions.params.sort = selectedSort
+    }
+    if(location != undefined){
+      console.log(search)
+      generalOptions.params.location = search
+    }
+    setLoading(true)
+    console.log(generalOptions)
+    axios.request(generalOptions)
+      .then(function (response) {
+        setLoading(false)
+        setResults([])
+        setResults(response.data.props)
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+
   return (
     <View style={styles.screenContainer}>
-      <SearchBar search={search} setSearch={setSearch} newSearch={newSearch}/>
+      <SearchBar search={search} 
+        setSearch={setSearch} 
+        newSearch={newSearch}
+        updateSortFilter={updateSortFilter}/>
       {
         loading == false ? null : <LoadingBar search={search}/>
       }
-      <View>
-        <Text>Hello</Text>
-      </View>
+      {
+        openSortAndFilter == false ? null : <SortAndFilter 
+                                              selectedSort={selectedSort}
+                                              setSelectedSort={setSelectedSort}
+                                              minPrice={minPrice}
+                                              setMinPrice={setMinPrice}
+                                              maxPrice={maxPrice}
+                                              setMaxPrice={setMaxPrice}
+                                              maxBaths={maxBaths}
+                                              setMaxBaths={setMaxBaths}
+                                              minBaths={minBaths}
+                                              setMinBaths={setMinBaths}
+                                              minBeds={minBeds}
+                                              setMinBeds={setMinBeds}
+                                              maxBeds={maxBeds}
+                                              setMaxBeds={setMaxBeds}
+                                              minSqft={minSqft}
+                                              setMinSqft={setMinSqft}
+                                              maxSqft={maxSqft}
+                                              setMaxSqft={setMaxSqft}
+                                              applyFilterAndSort={applyFilterAndSort}
+                                            />
+      }
       <FlatList 
         data={results}
         renderItem={({item}) => <PropertyTile 
