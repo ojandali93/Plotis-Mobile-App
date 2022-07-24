@@ -1,3 +1,6 @@
+import React, { useState } from 'react'
+import { app } from './firebase.js';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -11,11 +14,16 @@ import ThreadScreen from './src/screens/ThreadScreen.js';
 import ProfileScreen from './src/screens/ProfileScreen.js';
 import RecommendedScreen from './src/screens/RecommendedScreen.js';
 import DetailScreen from './src/screens/DetailScreen.js';
+import LoginScreen from './src/screens/LoginScreen.js';
+import SignUpScreen from './src/screens/SignUpScreen.js';
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
 
 const HomeStack = () => {
+
+  const [loggedIn, setLoggedIn] = useState()
+
   return (
     <StackNav.Navigator initialRouteName='Home'>
       <StackNav.Screen name="HomeStack" component={HomeScreen}/>
@@ -42,14 +50,14 @@ const ActivityStack = () => {
   )
 }
 
-const RecommendedStack = () => {
-  return (
-    <StackNav.Navigator>
-      <StackNav.Screen name="RecommendedStack" component={RecommendedScreen} />
-      <StackNav.Screen name="RecommendedDetailStack" component={PropertyDetail} />
-    </StackNav.Navigator>
-  )
-}
+// const RecommendedStack = () => {
+//   return (
+//     <StackNav.Navigator>
+//       <StackNav.Screen name="RecommendedStack" component={RecommendedScreen} />
+//       <StackNav.Screen name="RecommendedDetailStack" component={PropertyDetail} />
+//     </StackNav.Navigator>
+//   )
+// }
 
 // const MessagesStack = () => {
 //   return (
@@ -64,6 +72,8 @@ const ProfileStack = () => {
   return (
     <StackNav.Navigator>
       <StackNav.Screen name="ProfileStack" component={ProfileScreen} />
+      <StackNav.Screen name="LoginStack" component={LoginScreen} />
+      <StackNav.Screen name="SignUpStack" component={SignUpScreen} />
     </StackNav.Navigator>
   )
 }
@@ -73,7 +83,7 @@ const MainTabkNavigation = () => {
     <NavigationContainer>
       <TabNav.Navigator screenOptions={{headerShown: false}}>
         <TabNav.Screen key='Home' name="Home" component={HomeStack} /> 
-        <TabNav.Screen key='Recommended' name="Recommended" component={RecommendedStack} />
+        {/* <TabNav.Screen key='Recommended' name="Recommended" component={RecommendedStack} /> */}
         <TabNav.Screen key='Favorites' name="Favorites" component={FavoriteStack} />
         <TabNav.Screen key='Activity' name="Activity" component={ActivityStack} />
         {/* <TabNav.Screen key='Messages' name="Messages" component={MessagesStack} />  */}

@@ -1,10 +1,42 @@
-import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+import React, { useEffect, useState, useRef } from 'react'
+import { Text, View, StyleSheet } from 'react-native'
+import { getAuth, signOut } from 'firebase/auth'
 
-const ProfileScreen = () => {
+import { TouchableOpacity } from 'react-native-gesture-handler'
+
+const ProfileScreen = ({navigation}) => {
+  const auth = getAuth()
+
+  useEffect(() => {
+    console.log(auth.currentUser)
+    if(auth.currentUser === null){
+      navigation.navigate('LoginStack')
+    }
+  })
+
+  const signoutUser = () => {
+    signOut(auth)
+      .then(() => {
+        console.log('signed out')
+        navigation.navigate('LoginStack')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
   return (
-    <Text>Profile Screen. This will show all the user account informaiton and menus</Text>
+    <View>
+      <View>
+        <Text>Profile Screen</Text>
+      </View>
+      <TouchableOpacity onPress={() => {signoutUser()}}>
+        <Text>Logout</Text>
+      </TouchableOpacity>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({})
 
 export default ProfileScreen

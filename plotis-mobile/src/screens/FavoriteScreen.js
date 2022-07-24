@@ -1,21 +1,22 @@
-import React from 'react'
-import { View, FlatList, StyleSheet } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import { getAuth } from "firebase/auth";
+
 import PropertyTile from '../components/PropertyTile'
  
 const FavoriteScreen = ({navigation}) => {
+  const auth = getAuth()
 
-  const properties = [{key: 1}, {key: 2}, {key: 3}]
-
-  const PropertyDetailScreen = () => {
-    navigation.navigate('FavoriteDetailsStack')
-  }
+  useEffect(() => {
+    console.log(auth.currentUser)
+    if(auth.currentUser === null){
+      navigation.navigate('LoginStack')
+    }
+  })
 
   return (
-    <View style={styles.screenContainer}>
-      <FlatList 
-        data={properties}
-        renderItem={({item}) => <PropertyTile name={item} PropertyDetailScreen={PropertyDetailScreen}/>}
-      />
+    <View>
+      <Text>Logged In - favorites screen</Text>
     </View>
   )
 }

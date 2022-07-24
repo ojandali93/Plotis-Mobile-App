@@ -1,27 +1,24 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Text, StyleSheet, View, Image, TouchableOpacity, FlatList } from 'react-native'
 import ActivityDetail from '../components/ActivityDetail'
 
+import { getAuth } from "firebase/auth";
+
 const ActivityScreen = ({navigation}) => {
+  const auth = getAuth()
 
-  const activity = [{key: 1}, {key:2}, {key:3}, {key: 4}, {key:5}, {key:6}, {key:7}, {key: 8}, {key:9}, {key:10}]
-
-  const ActivtyDetailStack = () => {
-    navigation.navigate('ActivityDetailsStack')
-  }
-
-  const renderItem = ({ item }) => (
-    <ActivityDetail stytle={styles.tile} ActivtyDetailStack={ActivtyDetailStack}/>
-  );
+  useEffect(() => {
+    console.log(auth.currentUser)
+    if(auth.currentUser === null){
+      navigation.navigate('LoginStack')
+    }
+  })
 
   return (
     <View>
-      <View>
-        <FlatList 
-          data={activity}
-          renderItem={renderItem}
-        />
-      </View>
+      <Text>
+        Logged in - activity screen
+      </Text>
     </View>
   )
 }
