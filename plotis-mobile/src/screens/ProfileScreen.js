@@ -14,6 +14,15 @@ const ProfileScreen = ({navigation}) => {
     }
   })
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if(auth.currentUser === null){
+        navigation.navigate('LoginStack')
+      }
+    })
+    return unsubscribe
+  }, [navigation])
+
   const signoutUser = () => {
     signOut(auth)
       .then(() => {

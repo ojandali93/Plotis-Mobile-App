@@ -14,6 +14,15 @@ const FavoriteScreen = ({navigation}) => {
     }
   })
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if(auth.currentUser === null){
+        navigation.navigate('LoginStack')
+      }
+    })
+    return unsubscribe
+  }, [navigation])
+
   return (
     <View>
       <Text>Logged In - favorites screen</Text>
