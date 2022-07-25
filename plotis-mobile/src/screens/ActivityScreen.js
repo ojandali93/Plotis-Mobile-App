@@ -8,7 +8,6 @@ const ActivityScreen = ({navigation}) => {
   const auth = getAuth()
 
   useEffect(() => {
-    console.log(auth.currentUser)
     if(auth.currentUser === null){
       navigation.navigate('LoginStack')
     }

@@ -22,8 +22,6 @@ const StackNav = createStackNavigator();
 
 const HomeStack = () => {
 
-  const [loggedIn, setLoggedIn] = useState()
-
   return (
     <StackNav.Navigator initialRouteName='Home'>
       <StackNav.Screen name="HomeStack" component={HomeScreen}/>
@@ -85,7 +83,7 @@ const MainTabkNavigation = () => {
         <TabNav.Screen key='Home' name="Home" component={HomeStack} /> 
         {/* <TabNav.Screen key='Recommended' name="Recommended" component={RecommendedStack} /> */}
         <TabNav.Screen key='Favorites' name="Favorites" component={FavoriteStack} />
-        <TabNav.Screen key='Activity' name="Activity" component={ActivityStack} />
+        {/* <TabNav.Screen key='Activity' name="Activity" component={ActivityStack} /> */}
         {/* <TabNav.Screen key='Messages' name="Messages" component={MessagesStack} />  */}
         <TabNav.Screen key='Profile' name="Profile" component={ProfileStack} /> 
       </TabNav.Navigator>

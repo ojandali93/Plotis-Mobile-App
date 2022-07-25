@@ -1,21 +1,33 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { generalOptions } from '../api/zillowApi.js'
+import axios from 'axios';
+
+import FontAwesome from 'react-native-vector-icons/Feather'
+
+import { getAuth } from "firebase/auth";
+import { db } from '../../firebase.js';
+import { collection, onSnapshot } from 'firebase/firestore'
 
 import PropertyTile from '../components/PropertyTile.js'
 import SearchBar from '../components/SearchBar.js'
-import { generalOptions } from '../api/zillowApi.js'
-
-import axios from 'axios';
 import LoadingBar from '../components/LoadingBar.js'
 import SortAndFilter from '../components/SortAndFilter.js'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const HomeScreen = ({navigation}) => {
+  const auth = getAuth()
 
-  const [search, setSearch] = useState('Irvine, CA')
+  const userCollectionRef = collection(db, 'userFavorites')
+
+  const defaultSearch = 'Irvine, Ca'
+
+  const [search, setSearch] = useState('')
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
 
-  const [homeType, setHomeType] = useState()
+  const [singleResidence, setSingleResidence] = useState()
+
   const [minPrice, setMinPrice] = useState()
   const [maxPrice, setMaxPrice] = useState()
   const [minBaths, setMinBaths] = useState()
@@ -24,17 +36,21 @@ const HomeScreen = ({navigation}) => {
   const [maxBeds, setMaxBeds] = useState()
   const [minSqft, setMinSqft] = useState()
   const [maxSqft, setMaxSqft] = useState()
-  const [location, setLocation] = useState('Irvine, CA')
 
   const [openSortAndFilter, setOpenSortAndFilter] = useState(false)
 
   const [selectedSort, setSelectedSort] = useState()
 
-  const [pageNumber, setPageNumber] = useState()
+  const [pageNumber, setPageNumber] = useState(1)
+  const [previousPage, setPrivatePage] = useState(0)
+  const [nextPage, setNextPage] = useState(2)
+  const [searchNext, setSearchNext] = useState(false)
+  const [searchPrevious, setSearchPrevious] = useState(false)
+
+  const [userFavorites, setUesrFavorites] = useState([])
 
   useEffect(() => {
-    console.log(search)
-    generalOptions.params.location = search
+    generalOptions.params.location = defaultSearch
     axios.request(generalOptions)
       .then(function (response) {
         setResults(response.data.props)
@@ -45,32 +61,15 @@ const HomeScreen = ({navigation}) => {
   }, [])
 
   useEffect(() => {
-  }, [selectedSort])
-
-  useEffect(() => {
-  }, [search])
-
-  useEffect(() => {
-  }, [results])
-
-  useEffect(() => {
-  }, [minBeds])
-  
-  useEffect(() => {
-  }, [maxBeds])
-
-  useEffect(() => {
-  }, [minBaths])
-  
-  useEffect(() => {
-  }, [maxBaths])
-
-  useEffect(() => {
-  }, [minSqft])
-
-
-  useEffect(() => {
-  }, [maxSqft])
+    const unsubscribe = navigation.addListener('focus', () => {
+      if(auth.currentUser === null){
+        console.log('not logged in')
+      } else {
+        console.log('logged in')
+      }
+    })
+    return unsubscribe
+  }, [navigation])
 
   const PropertyDetailScreen = (zpid) => {
     console.log(zpid)
@@ -80,12 +79,19 @@ const HomeScreen = ({navigation}) => {
   const newSearch = () => {
     setLoading(true)
     generalOptions.params.location = search
-    console.log(generalOptions)
+    generalOptions.params.page = pageNumber.toString()
     axios.request(generalOptions)
       .then(function (response) {
-        setLoading(false)
-        setResults([])
-        setResults(response.data.props)
+        console.log(response.data)
+        if(response.data.address){
+          setLoading(false)
+          setResults([])
+          setResults(response.data.props)
+        } else {
+          setLoading(false)
+          setResults([])
+          navigation.navigate('HomeDetailsStack', {zpid: response.data.zpid})
+        }
       })
       .catch(function (error) {
         console.error(error);
@@ -97,6 +103,24 @@ const HomeScreen = ({navigation}) => {
       setOpenSortAndFilter(true)
     } else {
       setOpenSortAndFilter(false)
+    }
+  }
+
+  const goToNextPage = () => {
+    setNextPage(nextPage + 1)
+    setPageNumber(pageNumber + 1)
+    setPrivatePage(previousPage + 1)
+    setSearchNext(true)
+    applyFilterAndSort()
+  }
+
+  const goToPreviousPage = () => {
+    if(previousPage > 0){
+      setPrivatePage(previousPage - 1)
+      setPageNumber(pageNumber - 1)
+      setNextPage(nextPage - 1)
+      setSearchPrevious(true)
+      applyFilterAndSort()
     }
   }
 
@@ -128,12 +152,20 @@ const HomeScreen = ({navigation}) => {
     if(selectedSort != undefined){
       generalOptions.params.sort = selectedSort
     }
-    if(location != undefined){
-      console.log(search)
+    if(search == ''){
+      generalOptions.params.location = defaultSearch
+    } else {
       generalOptions.params.location = search
     }
+    if(searchPrevious == true){
+      generalOptions.params.page = previousPage
+      setSearchNext(false)
+    }
+    if(searchNext == true){
+      generalOptions.params.page = nextPage
+      setSearchPrevious(false)
+    }
     setLoading(true)
-    console.log(generalOptions)
     axios.request(generalOptions)
       .then(function (response) {
         setLoading(false)
@@ -177,6 +209,19 @@ const HomeScreen = ({navigation}) => {
                                               applyFilterAndSort={applyFilterAndSort}
                                             />
       }
+      <View>
+        <TouchableOpacity onPress={() => {goToPreviousPage()}}>
+          <FontAwesome style={styles.icon} size={20} name='chevron-right'/>
+        </TouchableOpacity>
+          {
+            previousPage == 0 ? null : <Text>{previousPage}</Text>
+          }
+          <Text>{pageNumber}</Text>
+          <Text>{nextPage}</Text>
+        <TouchableOpacity onPress={() => {goToNextPage()}}>
+          <FontAwesome style={styles.icon} size={20} name='chevron-right'/>
+        </TouchableOpacity>
+      </View>
       <FlatList 
         data={results}
         renderItem={({item}) => <PropertyTile 

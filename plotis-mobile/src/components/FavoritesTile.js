@@ -6,11 +6,11 @@ import { convertToDollars, convertFirstUpper, formatSingleStringAddress } from '
 import FontAwesome from 'react-native-vector-icons/Feather'
 
 import { db } from '../../firebase'
-import { collection, getDocs, addDoc } from 'firebase/firestore'
+import { collection, deleteDoc, doc } from 'firebase/firestore'
 
 import { getAuth } from "firebase/auth";
 
-const PropertyTile = (props) => {
+const FavoritesTile = (props) => {
   const {
     item,
     PropertyDetailScreen
@@ -18,35 +18,21 @@ const PropertyTile = (props) => {
 
   const auth = getAuth()
 
-  const collectionRef = collection(db, 'UserFavorites')
+  // const collectionRef = collection(db, 'UserFavorites')
 
-  const addToFavorites = () => {
+  const docRef = doc(db, 'UserFavorites', item.id)
+
+  const removeFromFavorites = () => {
     if(auth.currentUser === null){
       navigation.navigate('LoginStack')
     } else {
-      addDoc(collectionRef, {
-        "address": item.address,
-        "bathrooms": item.bathrooms,
-        "bedrooms": item.bedrooms,
-        "contingentListingType": item.contingentListingType,
-        "country": item.country,
-        "currency": item.currency,
-        "dateSold": item.dateSold,
-        "daysOnZillow": item.daysOnZillow,
-        "hasImage": item.hasImage,
-        "imgSrc": item.imgSrc,
-        "latitude": item.latitude,
-        "listingStatus": item.listingStatus,
-        "listingSubType": item.listingSubType,
-        "livingArea": item.livingArea,
-        "longitude": item.longitude,
-        "lotAreaUnit": item.lotAreaUnit,
-        "lotAreaValue": item.lotAreaValue,
-        "price": item.price,
-        "propertyType": item.propertyType,
-        "zpid": item.zpid,
-        "userId": auth.currentUser.uid
-      })
+      deleteDoc(docRef)
+        .then(() => {
+          console.log('document was deleted')
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
   }
 
@@ -63,7 +49,7 @@ const PropertyTile = (props) => {
         <View style={[styles.imageContainer,{height: aspectHeight}]}>
           <Image style={styles.mainImage} source={{uri: item.imgSrc}}/>
         </View>
-        <TouchableOpacity onPress={() => {addToFavorites()}}>
+        <TouchableOpacity onPress={() => {removeFromFavorites()}}>
           <FontAwesome style={styles.icon} size={20} name='heart'/>
         </TouchableOpacity>
         <View style={styles.contentContainer}>
@@ -182,4 +168,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default PropertyTile
+export default FavoritesTile

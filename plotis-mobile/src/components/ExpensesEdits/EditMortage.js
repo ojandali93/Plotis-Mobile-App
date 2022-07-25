@@ -47,7 +47,7 @@ const EditMortage = (props) => {
           style={styles.input}
           keyboardType='numeric'
           onChangeText={(number) => editDownPaymentPercent(number)}
-          value={(downPaymentPercent * 100).toFixed(2).toString()}
+          value={(Math.round(downPaymentPercent * 100)).toString()}
         />
       </View>
       <View>

@@ -1,23 +1,60 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, FlatList } from 'react-native'
 import { getAuth } from "firebase/auth";
+import { app, db } from '../../firebase'
+import {
+  collection, getDocs, addDoc, onSnapshot, query, where
+} from 'firebase/firestore'
 
 import PropertyTile from '../components/PropertyTile'
+import FavoritesTile from '../components/FavoritesTile';
  
 const FavoriteScreen = ({navigation}) => {
   const auth = getAuth()
 
+  const collectionRef = collection(db, 'UserFavorites')
+
+  const [favorites, setFavorites] = useState([])
+  const [favoritesZpid, setFavoritesZpid] = useState([])
+
   useEffect(() => {
-    console.log(auth.currentUser)
     if(auth.currentUser === null){
       navigation.navigate('LoginStack')
+    } else {
+      collectuserFavorites()
     }
-  })
+  }, [])
+
+  const collectuserFavorites = () => {
+    const collectionRef = collection(db, 'UserFavorites')
+    const q = query(collectionRef, where('userId', '==', auth.currentUser.uid))
+    onSnapshot(q, (snapshot) => {
+      let properties = []
+      snapshot.docs.forEach((doc) => {
+        properties.push({ ...doc.data(), id: doc.id })
+      })
+      setFavorites(properties)
+    })
+  }
+
+  useEffect(() => {
+    favorites.forEach((item) => {
+      console.log(item.zpid)
+      favoritesZpid.push(item.zpid)
+    })
+  }, [favorites])
+
+  const PropertyDetailScreen = (zpid) => {
+    console.log(zpid)
+    navigation.navigate('HomeDetailsStack', {zpid: zpid})
+  }
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if(auth.currentUser === null){
         navigation.navigate('LoginStack')
+      } else {
+        collectuserFavorites()
       }
     })
     return unsubscribe
@@ -25,7 +62,12 @@ const FavoriteScreen = ({navigation}) => {
 
   return (
     <View>
-      <Text>Logged In - favorites screen</Text>
+      <FlatList 
+        data={favorites}
+        renderItem={({item}) => <FavoritesTile 
+                                  item={item} 
+                                  PropertyDetailScreen={PropertyDetailScreen}/>}
+      />
     </View>
   )
 }

@@ -11,7 +11,7 @@ const SignUpScreen = ({navigation}) => {
     createUserWithEmailAndPassword(auth, email, password)
     .then(userCredentials => {
       const user = userCredentials.user 
-      console.log(user.email)
+      console.log(user.uid)
       navigation.navigate('ProfileStack')
     })
     .catch((error) => {

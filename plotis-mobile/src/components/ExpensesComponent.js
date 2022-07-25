@@ -112,17 +112,18 @@ const ExpensesComponent = (props) => {
   }, [downPaymentAmount])
 
   useEffect(() => {
-    setLoanAmount(calculateLoanAmount(homePrice, downPaymentAmount))
+    // setLoanAmount(calculateLoanAmount(homePrice, downPaymentAmount))
+    setDownPaymentAmount(calculateDownPaymentAmount(homePrice, downPaymentPercent))
   }, [downPaymentPercent])
 
   useEffect(() => {
-    setMonthlyMortgage(calculateMortgagePayment(loanAmount, interestRate))
-    setTotalPrincipalAndInterest(calculateMortgagePayment(loanAmount, interestRate))
+    setMonthlyMortgage(calculateMortgagePayment(loanAmount, parseFloat(interestRate)))
+    setTotalPrincipalAndInterest(calculateMortgagePayment(loanAmount, parseFloat(interestRate)))
   }, [loanAmount])
 
   useEffect(() => {
     setMonthlyMortgage(calculateMortgagePayment(loanAmount, interestRate))
-    setTotalPrincipalAndInterest(calculateMortgagePayment(loanAmount, interestRate))
+    setTotalPrincipalAndInterest(calculateMortgagePayment(loanAmount, parseFloat(interestRate)))
   }, [interestRate])
 
   useEffect(() => {
@@ -211,7 +212,9 @@ const ExpensesComponent = (props) => {
     if(value == ""){
       setInterestRate(0.00)
     } else {
-      setInterestRate(parseFloat(value))
+      console.log('value', value)
+      console.log('parse', parseFloat(value))
+      setInterestRate(value)
     }
   }
 
