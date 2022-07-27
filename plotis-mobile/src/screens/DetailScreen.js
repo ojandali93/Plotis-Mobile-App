@@ -9,6 +9,7 @@ import TaxHistoryComponent from '../components/TaxHistoryComponent'
 import ExpensesComponent from '../components/ExpensesComponent'
 import RevenueComponent from '../components/RevenueComponent'
 import InvestmentMetrics from '../components/InvestmentMetrics'
+import ContactAgentComponent from '../components/ContactAgentComponent'
 
 
 import { calculateMortgagePayment } from '../metrics'
@@ -134,7 +135,7 @@ const DetailScreen = (props) => {
         <PropertyValueComponent property={property} priceHistory={priceHistory}/>
 
         <View style={styles.seperate}></View> 
-
+              
         <TaxHistoryComponent property={property} taxHistory={taxHistory}/>
 
         <View style={styles.seperate}></View>
@@ -163,6 +164,10 @@ const DetailScreen = (props) => {
           totalDownPayment={totalDownPayment}
           totalExpWithoutMortgage={totalExpWithoutMortgage}
         />
+
+        <View style={styles.seperate}></View>
+
+        <ContactAgentComponent property={property}/>
         
       </ScrollView>
     )

@@ -8,7 +8,7 @@ import Feather from 'react-native-vector-icons/Feather'
 const SearchBar = (props) => {
 
   const {
-    search, setSearch, newSearch, updateSortFilter
+    search, setSearch, newSearch, updateSortFilter, setPreviousSearch
   } = props
 
   return (
@@ -18,7 +18,7 @@ const SearchBar = (props) => {
         <TextInput 
           style={styles.searchBar}
           placeholder="Seach..."
-          onChangeText={newText => setSearch(newText)}
+          onChangeText={(newText) => {setSearch(newText)}}
           defaultValue={search}
         />
       </View>

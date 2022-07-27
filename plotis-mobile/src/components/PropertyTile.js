@@ -46,6 +46,10 @@ const PropertyTile = (props) => {
         "propertyType": item.propertyType,
         "zpid": item.zpid,
         "userId": auth.currentUser.uid
+      }).then((response) => {
+        console.log(response)
+      }).catch((error) => {
+        console.error(error)
       })
     }
   }
@@ -59,7 +63,7 @@ const PropertyTile = (props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => {PropertyDetailScreen(item.zpid)}}>
+      <TouchableOpacity onPress={() => {PropertyDetailScreen(item.zpid, item.address)}}>
         <View style={[styles.imageContainer,{height: aspectHeight}]}>
           <Image style={styles.mainImage} source={{uri: item.imgSrc}}/>
         </View>

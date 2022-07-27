@@ -6,8 +6,8 @@ import axios from 'axios';
 import FontAwesome from 'react-native-vector-icons/Feather'
 
 import { getAuth } from "firebase/auth";
-import { db } from '../../firebase.js';
-import { collection, onSnapshot } from 'firebase/firestore'
+import { db } from '../../firebase'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 
 import PropertyTile from '../components/PropertyTile.js'
 import SearchBar from '../components/SearchBar.js'
@@ -18,15 +18,15 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const HomeScreen = ({navigation}) => {
   const auth = getAuth()
 
-  const userCollectionRef = collection(db, 'userFavorites')
+  const recentViewRef = collection(db, 'RecentView')
+  const reventSearchRef = collection(db, 'RecentSearch')
 
   const defaultSearch = 'Irvine, Ca'
 
   const [search, setSearch] = useState('')
+  const [previousSearch, setPreviousSearch] = useState('')
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
-
-  const [singleResidence, setSingleResidence] = useState()
 
   const [minPrice, setMinPrice] = useState()
   const [maxPrice, setMaxPrice] = useState()
@@ -71,26 +71,53 @@ const HomeScreen = ({navigation}) => {
     return unsubscribe
   }, [navigation])
 
-  const PropertyDetailScreen = (zpid) => {
-    console.log(zpid)
+  const PropertyDetailScreen = (zpid, address) => {
+    addDoc(recentViewRef, {
+      'address': address,
+      'userId': auth.currentUser.uid,
+      'createdAt': serverTimestamp()
+    }).then((response) => {
+      console.log(response)
+    }).catch((error) => {
+      console.error(error)
+    })
     navigation.navigate('HomeDetailsStack', {zpid: zpid})
+  }
+
+  useEffect(() => {
+    setPreviousSearch(search)
+  }, [search])
+
+  const addRecentSearch = () => {
+    if(auth.currentUser.uid){
+      addDoc(reventSearchRef, {
+        'search': search,
+        'userId': auth.currentUser.uid,
+        'createdAt': serverTimestamp()
+      }).then((response) => {
+        console.log(response)
+      }).catch((error) => {
+        console.error(error)
+      })
+    }
   }
 
   const newSearch = () => {
     setLoading(true)
     generalOptions.params.location = search
     generalOptions.params.page = pageNumber.toString()
+    addRecentSearch()
     axios.request(generalOptions)
       .then(function (response) {
-        console.log(response.data)
-        if(response.data.address){
-          setLoading(false)
-          setResults([])
+        // let responseResults = response.data
+        setLoading(false)
+        setResults([])
+        setSearch([])
+        if(response.data.props){
           setResults(response.data.props)
         } else {
-          setLoading(false)
-          setResults([])
-          navigation.navigate('HomeDetailsStack', {zpid: response.data.zpid})
+          let propZpid = response.data.zpid
+          navigation.navigate('HomeDetailsStack', {zpid: propZpid})
         }
       })
       .catch(function (error) {
@@ -153,7 +180,11 @@ const HomeScreen = ({navigation}) => {
       generalOptions.params.sort = selectedSort
     }
     if(search == ''){
-      generalOptions.params.location = defaultSearch
+      if(previousSearch == ''){
+        generalOptions.params.location = defaultSearch
+      } else {
+        generalOptions.params.location = previousSearch
+      }
     } else {
       generalOptions.params.location = search
     }
@@ -182,7 +213,8 @@ const HomeScreen = ({navigation}) => {
       <SearchBar search={search} 
         setSearch={setSearch} 
         newSearch={newSearch}
-        updateSortFilter={updateSortFilter}/>
+        updateSortFilter={updateSortFilter}
+        setPreviousSearch={setPreviousSearch}/>
       {
         loading == false ? null : <LoadingBar search={search}/>
       }
@@ -209,6 +241,12 @@ const HomeScreen = ({navigation}) => {
                                               applyFilterAndSort={applyFilterAndSort}
                                             />
       }
+      <FlatList 
+        data={results}
+        renderItem={({item}) => <PropertyTile 
+                                  item={item} 
+                                  PropertyDetailScreen={PropertyDetailScreen}/>}
+      />
       <View>
         <TouchableOpacity onPress={() => {goToPreviousPage()}}>
           <FontAwesome style={styles.icon} size={20} name='chevron-right'/>
@@ -222,12 +260,6 @@ const HomeScreen = ({navigation}) => {
           <FontAwesome style={styles.icon} size={20} name='chevron-right'/>
         </TouchableOpacity>
       </View>
-      <FlatList 
-        data={results}
-        renderItem={({item}) => <PropertyTile 
-                                  item={item} 
-                                  PropertyDetailScreen={PropertyDetailScreen}/>}
-      />
     </View>
   )
 }
@@ -236,7 +268,10 @@ const styles = StyleSheet.create({
   screenContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: 40
+    marginTop: 38,
+    marginBottom: 40,
+    backgroundColor: 'lightgrey',
+    height: 800
   }
 })
 

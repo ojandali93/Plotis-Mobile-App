@@ -19,19 +19,17 @@ const PropertyValueComponent = (props) => {
         <Text>Event</Text>
         <Text>Price</Text>
       </View>
-      <FlatList 
-        data={priceHistory}
-        key={priceHistory.time}
-        renderItem={({item}) => {
+      {
+        priceHistory.map((item) => {
           return(
-            <View style={styles.eventContainer}>
+            <View style={styles.eventContainer} key={item.date}>
               <Text>{item.date}</Text>
               <Text>{item.event}</Text>
               <Text>${convertToDollars(item.price)}</Text>
             </View>
           )
-        }}
-      />
+        })
+      }
     </View>
   )
 }

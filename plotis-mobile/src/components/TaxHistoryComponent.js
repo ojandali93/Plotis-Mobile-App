@@ -9,6 +9,8 @@ const TaxHistoryComponent = (props) => {
     taxHistory
   } = props
 
+  console.log(taxHistory)
+
   return (
     <View style={styles.taxHistoryContainer}>
       <View>
@@ -19,19 +21,21 @@ const TaxHistoryComponent = (props) => {
         <Text>Tax($)</Text>
         <Text>Assessment</Text>
       </View>
-      <FlatList 
-        data={taxHistory}
-        key={taxHistory.time}
-        renderItem={({item}) => {
-          return (
-            <View style={styles.eventContainer}>
-              <Text>{convertEpochToDate(item.time)}</Text>
-              <Text>{item.taxPaid}</Text>
-              <Text>${convertToDollars(item.value)}</Text>
-            </View>
-          )
-        }}
-      />
+      {
+        taxHistory.map((item) => {
+          if(item != undefined){
+            return(
+              <View style={styles.eventContainer} key={item.time}>
+                <Text>{convertEpochToDate(item.time)}</Text>
+                <Text>{item.taxPaid}</Text>
+                <Text>${convertToDollars(item.value)}</Text>
+              </View>
+            )
+          } else {
+            <></>
+          }
+        })
+      }
     </View>
   )
 }
