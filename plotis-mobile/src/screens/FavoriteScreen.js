@@ -12,8 +12,6 @@ import FavoritesTile from '../components/FavoritesTile';
 const FavoriteScreen = ({navigation}) => {
   const auth = getAuth()
 
-  const collectionRef = collection(db, 'UserFavorites')
-
   const [favorites, setFavorites] = useState([])
   const [favoritesZpid, setFavoritesZpid] = useState([])
 
@@ -33,6 +31,7 @@ const FavoriteScreen = ({navigation}) => {
       snapshot.docs.forEach((doc) => {
         properties.push({ ...doc.data(), id: doc.id })
       })
+      console.log('hello')
       setFavorites(properties)
     })
   }
@@ -64,6 +63,7 @@ const FavoriteScreen = ({navigation}) => {
     <View>
       <FlatList 
         data={favorites}
+        keyExtractor={(item) => {item.createdAt}}
         renderItem={({item}) => <FavoritesTile 
                                   item={item} 
                                   PropertyDetailScreen={PropertyDetailScreen}/>}

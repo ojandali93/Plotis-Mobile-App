@@ -31,6 +31,7 @@
     "react-native-tag-select": "^2.0.0",
     "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.7",
+    "react-native-webview": "^11.23.0",
     "rn-sequelize": "^5.21.4",
     "sequelize": "^6.21.0"
   },

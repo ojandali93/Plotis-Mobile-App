@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 import { app } from './firebase.js';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -16,6 +17,9 @@ import RecommendedScreen from './src/screens/RecommendedScreen.js';
 import DetailScreen from './src/screens/DetailScreen.js';
 import LoginScreen from './src/screens/LoginScreen.js';
 import SignUpScreen from './src/screens/SignUpScreen.js';
+import CreateProfileScreen from './src/screens/CreateProfileScreen.js';
+
+import Feather from 'react-native-vector-icons/Feather'
 
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
@@ -72,6 +76,7 @@ const ProfileStack = () => {
       <StackNav.Screen name="ProfileStack" component={ProfileScreen} />
       <StackNav.Screen name="LoginStack" component={LoginScreen} />
       <StackNav.Screen name="SignUpStack" component={SignUpScreen} />
+      <StackNav.Screen name="ProfileSetupStack" component={CreateProfileScreen}/>
     </StackNav.Navigator>
   )
 }
@@ -80,15 +85,41 @@ const MainTabkNavigation = () => {
   return (
     <NavigationContainer>
       <TabNav.Navigator screenOptions={{headerShown: false}}>
-        <TabNav.Screen key='Home' name="Home" component={HomeStack} /> 
+        <TabNav.Screen 
+          key='Home' 
+          name="Home" 
+          component={HomeStack} 
+          options={{
+            tabBarIcon: ({size, color}) => (<Feather name={"home"} color={color} size={size} />)
+          }}/> 
         {/* <TabNav.Screen key='Recommended' name="Recommended" component={RecommendedStack} /> */}
-        <TabNav.Screen key='Favorites' name="Favorites" component={FavoriteStack} />
-        {/* <TabNav.Screen key='Activity' name="Activity" component={ActivityStack} /> */}
+        <TabNav.Screen 
+          key='Favorites' 
+          name="Favorites" 
+          component={FavoriteStack} 
+          options={{
+            tabBarIcon: ({size, color}) => (<Feather name={"heart"} color={color} size={size} />)
+          }}/>
+        <TabNav.Screen 
+          key='Activity' 
+          name="Activity" 
+          component={ActivityStack} 
+          options={{
+            tabBarIcon: ({size, color}) => (<Feather name={"bell"} color={color} size={size} />)
+          }}/>
         {/* <TabNav.Screen key='Messages' name="Messages" component={MessagesStack} />  */}
-        <TabNav.Screen key='Profile' name="Profile" component={ProfileStack} /> 
+        <TabNav.Screen 
+          key='Profile' 
+          name="Profile" 
+          component={ProfileStack} 
+          options={{
+            tabBarIcon: ({size, color}) => (<Feather name={"user"} color={color} size={size} />)
+          }}/>
       </TabNav.Navigator>
     </NavigationContainer>
   )
 }
+
+const styles = StyleSheet.create({})
 
 export default MainTabkNavigation;

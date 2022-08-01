@@ -71,17 +71,36 @@ const HomeScreen = ({navigation}) => {
     return unsubscribe
   }, [navigation])
 
-  const PropertyDetailScreen = (zpid, address) => {
+  const PropertyDetailScreen = (item) => {
     addDoc(recentViewRef, {
-      'address': address,
       'userId': auth.currentUser.uid,
-      'createdAt': serverTimestamp()
+      'createdAt': serverTimestamp(),
+      "address": item.address,
+      "bathrooms": item.bathrooms,
+      "bedrooms": item.bedrooms,
+      "contingentListingType": item.contingentListingType,
+      "country": item.country,
+      "currency": item.currency,
+      "dateSold": item.dateSold,
+      "daysOnZillow": item.daysOnZillow,
+      "hasImage": item.hasImage,
+      "imgSrc": item.imgSrc,
+      "latitude": item.latitude,
+      "listingStatus": item.listingStatus,
+      "listingSubType": item.listingSubType,
+      "livingArea": item.livingArea,
+      "longitude": item.longitude,
+      "lotAreaUnit": item.lotAreaUnit,
+      "lotAreaValue": item.lotAreaValue,
+      "price": item.price,
+      "propertyType": item.propertyType,
+      "zpid": item.zpid,
     }).then((response) => {
       console.log(response)
     }).catch((error) => {
       console.error(error)
     })
-    navigation.navigate('HomeDetailsStack', {zpid: zpid})
+    navigation.navigate('HomeDetailsStack', {zpid: item.zpid})
   }
 
   useEffect(() => {

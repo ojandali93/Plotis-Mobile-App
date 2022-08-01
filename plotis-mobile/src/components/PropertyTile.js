@@ -6,7 +6,7 @@ import { convertToDollars, convertFirstUpper, formatSingleStringAddress } from '
 import FontAwesome from 'react-native-vector-icons/Feather'
 
 import { db } from '../../firebase'
-import { collection, getDocs, addDoc } from 'firebase/firestore'
+import { collection, addDoc } from 'firebase/firestore'
 
 import { getAuth } from "firebase/auth";
 
@@ -63,7 +63,7 @@ const PropertyTile = (props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => {PropertyDetailScreen(item.zpid, item.address)}}>
+      <TouchableOpacity onPress={() => {PropertyDetailScreen(item)}}>
         <View style={[styles.imageContainer,{height: aspectHeight}]}>
           <Image style={styles.mainImage} source={{uri: item.imgSrc}}/>
         </View>
