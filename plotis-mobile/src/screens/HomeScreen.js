@@ -7,7 +7,7 @@ import FontAwesome from 'react-native-vector-icons/Feather'
 
 import { getAuth } from "firebase/auth";
 import { db } from '../../firebase'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { collection, addDoc, serverTimestamp, query, onSnapshot, where, deleteDoc, doc } from 'firebase/firestore'
 
 import PropertyTile from '../components/PropertyTile.js'
 import SearchBar from '../components/SearchBar.js'
@@ -47,7 +47,10 @@ const HomeScreen = ({navigation}) => {
   const [searchNext, setSearchNext] = useState(false)
   const [searchPrevious, setSearchPrevious] = useState(false)
 
-  const [userFavorites, setUesrFavorites] = useState([])
+  const [favoritesList, setFavoritesList] = useState([])
+  const [favoritesZpid, setFavoritesZpid] = useState([])
+
+  const collectionRef = collection(db, 'UserFavorites')
 
   useEffect(() => {
     generalOptions.params.location = defaultSearch
@@ -58,18 +61,42 @@ const HomeScreen = ({navigation}) => {
       .catch(function (error) {
         console.error(error);
       });
+    if(auth.currentUser === null){
+      console.log('nothing')
+    } else {
+      grabUserFavorites()
+    }
   }, [])
+
+  useEffect(() => {
+    const newFavorites = []
+    favoritesList.forEach((item) => {
+      newFavorites.push(item.zpid)
+    })
+    setFavoritesZpid(newFavorites)
+  }, [favoritesList])
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if(auth.currentUser === null){
         console.log('not logged in')
       } else {
-        console.log('logged in')
+        grabUserFavorites()
       }
     })
     return unsubscribe
   }, [navigation])
+
+  const grabUserFavorites = () => {
+    const q = query(collectionRef, where('userId', '==', auth.currentUser.uid))
+    onSnapshot(q, (snapshot) => {
+      let favorites = []
+      snapshot.docs.forEach((doc) => {
+        favorites.push({ ...doc.data(), id: doc.id })
+      })
+      setFavoritesList(favorites)
+    })
+  }
 
   const PropertyDetailScreen = (item) => {
     addDoc(recentViewRef, {
@@ -106,6 +133,24 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     setPreviousSearch(search)
   }, [search])
+
+  const removeDoc = (zpid) => {
+    let selectedFavorite
+    favoritesList.forEach((fav) => {
+      if(fav.zpid == zpid.zpid){
+        selectedFavorite = fav
+      }
+    })
+    const docRef = doc(db, 'UserFavorites', selectedFavorite.id)
+    deleteDoc(docRef)
+      .then((response) => {
+        console.log('delete favorite')
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
 
   const addRecentSearch = () => {
     if(auth.currentUser.uid){
@@ -229,7 +274,8 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.screenContainer}>
-      <SearchBar search={search} 
+      <SearchBar 
+        search={search} 
         setSearch={setSearch} 
         newSearch={newSearch}
         updateSortFilter={updateSortFilter}
@@ -260,13 +306,17 @@ const HomeScreen = ({navigation}) => {
                                               applyFilterAndSort={applyFilterAndSort}
                                             />
       }
+      <View style={styles.seperator}></View>
       <FlatList 
         data={results}
         renderItem={({item}) => <PropertyTile 
                                   item={item} 
-                                  PropertyDetailScreen={PropertyDetailScreen}/>}
+                                  PropertyDetailScreen={PropertyDetailScreen}
+                                  favoritesList={favoritesList}
+                                  favoritesZpid={favoritesZpid}
+                                  removeDoc={removeDoc}/>}
       />
-      <View>
+      <View >
         <TouchableOpacity onPress={() => {goToPreviousPage()}}>
           <FontAwesome style={styles.icon} size={20} name='chevron-right'/>
         </TouchableOpacity>
@@ -287,10 +337,17 @@ const styles = StyleSheet.create({
   screenContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 38,
+    marginTop: 44,
     marginBottom: 40,
+    height: 800,
+    borderTopColor: 'lightgrey',
+    borderTopWidth: 2
+  },
+  seperator: {
+    width: '100%',
+    height: 2,
     backgroundColor: 'lightgrey',
-    height: 800
+    marginBottom: 8
   }
 })
 

@@ -21,6 +21,8 @@ import CreateProfileScreen from './src/screens/CreateProfileScreen.js';
 
 import Feather from 'react-native-vector-icons/Feather'
 
+console.disableYellowBox = true;
+
 const TabNav = createBottomTabNavigator();
 const StackNav = createStackNavigator();
 

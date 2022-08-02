@@ -18,7 +18,7 @@ const FavoritesTile = (props) => {
 
   const auth = getAuth()
 
-  // const collectionRef = collection(db, 'UserFavorites')
+  const collectionRef = collection(db, 'UserFavorites')
 
   const docRef = doc(db, 'UserFavorites', item.id)
 
@@ -45,29 +45,43 @@ const FavoritesTile = (props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => {PropertyDetailScreen(item.zpid)}}>
+      <TouchableOpacity onPress={() => {PropertyDetailScreen(item)}}>
         <View style={[styles.imageContainer,{height: aspectHeight}]}>
           <Image style={styles.mainImage} source={{uri: item.imgSrc}}/>
         </View>
-        <TouchableOpacity onPress={() => {removeFromFavorites()}}>
+        {/* <TouchableOpacity onPress={() => {addToFavorites()}}>
           <FontAwesome style={styles.icon} size={20} name='heart'/>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View style={styles.contentContainer}>
           <View style={styles.priceContainer}>
             <Text style={styles.price}>${convertToDollars(item.price)}</Text>
             <Text style={styles.status}>{convertFirstUpper(item.listingStatus)}</Text>
           </View>
           <View style={styles.addressContainer}>
-            <Text style={styles.address}>{propertyAddress1}</Text>
-            <Text style={styles.address}>{propertyAddress2}</Text>
+            <Text style={styles.address}>{item.address}</Text>
           </View>
-          <View style={styles.separator}></View>
           <View style={styles.details}>
             <Text style={styles.summary}>{item.bedrooms} Beds | {item.bathrooms} Baths | {item.livingArea} Sqft.</Text>
             <Text style={styles.homeType}>{convertFirstUpper(item.propertyType)}</Text>
           </View>
           <View style={styles.separator}></View>
-          <View style={styles.details}>
+          <View style={styles.menuContainer}>
+            <View style={styles.boxRemove}>
+              <TouchableOpacity onPress={() => {removeDoc(item)}}>
+                <Text style={styles.button}>
+                  Remove from Watchlist
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.box}>
+              <TouchableOpacity>
+                <Text style={styles.button}>
+                  Contact Agent
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* <View style={styles.details}>
             <View style={styles.metricContainer}>
               <Text style={styles.metricName}>Net Operating Income (Monthly): </Text>
               <Text style={styles.metricValue}>$5,789</Text>
@@ -83,7 +97,7 @@ const FavoritesTile = (props) => {
           </View>
           <View style={styles.disclaimerContainer}>
             <Text style={styles.disclaimer}>*** 30 year fixed, 20% down, 3.14% interest rate ***</Text>
-          </View>
+          </View> */}
         </View>
       </TouchableOpacity>
     </View>
@@ -128,44 +142,76 @@ const styles = StyleSheet.create({
   },   
   addressContainer: {
     display: 'flex',
-    marginTop: 8
+    marginTop: 8,
   },
   address: {
-    fontSize: 14
+    fontSize: 16,
+    fontWeight: '600'
   },
   separator: {
-    marginHorizontal: '3%',
     marginVertical: 8,
     height: 2,
-    width: '94%',
+    width: '100%',
     backgroundColor: 'grey'
   },  
   homeType: {
     marginTop: 4,
   },
-  metricContainer: {
+  details: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 4
+    justifyContent: 'space-between'
   },
-  metricValue: {
-    fontWeight: 'bold'
+  summary: {
+    fontSize: 16,
+    fontWeight: '600'
   },
-  disclaimerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginVertical: 8,
-    width: '100%',
-    justifyContent: 'center',
-  },  
-  disclaimer: {
-    fontSize: 12,
+  homeType: {
+    fontSize: 16,
+    fontWeight: '600'
   },
   icon:{
     paddingHorizontal: 8,
     paddingTop: 4
   },
+  menuContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    marginBottom: 10,
+    justifyContent: 'space-between'
+  },
+  box: {
+    width: '48%',
+    backgroundColor: 'grey',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    borderRadius: 8
+  },
+  boxAdd: {
+    width: '48%',
+    backgroundColor: 'green',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    borderRadius: 8
+  },
+  boxRemove: {
+    width: '48%',
+    backgroundColor: 'red',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    borderRadius: 8
+  },
+  button: {
+    fontSize: 16,
+    fontWeight: '600'
+  }
 })
 
 export default FavoritesTile

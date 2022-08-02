@@ -3,8 +3,6 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-nativ
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Feather from 'react-native-vector-icons/Feather'
 
-
-
 const SearchBar = (props) => {
 
   const {
@@ -17,7 +15,7 @@ const SearchBar = (props) => {
         <FontAwesome style={styles.icon} size={20} name='search'/>
         <TextInput 
           style={styles.searchBar}
-          placeholder="Seach..."
+          placeholder="Seach (Address, City, State, ...a)"
           onChangeText={(newText) => {setSearch(newText)}}
           defaultValue={search}
         />
@@ -25,10 +23,9 @@ const SearchBar = (props) => {
       <TouchableOpacity onPress={() => {newSearch()}}>
         <Text style={styles.searchSubmit}>Search</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => {updateSortFilter()}}>
-        <Feather style={styles.icon} size={20} name='sliders'/>
+      <TouchableOpacity style={styles.filterAndSort} onPress={() => {updateSortFilter()}}>
+        <Feather size={20} name='sliders'/>
       </TouchableOpacity>
-      
     </View>
   )
 }
@@ -44,21 +41,35 @@ const styles = StyleSheet.create({
   barContainer: {
     display: 'flex',
     flexDirection: 'row',
-    width: '75%'
+    width: '70%',
+    backgroundColor: 'lightgrey',
+    paddingVertical: 8,
+    borderRadius: 10
   },
   searchBar: {
     borderBottomColor: 'black',
     width: '85%',
     borderBottomWidth: 2,
-    fontSize: 22,
+    fontSize: 18,
   },
   searchSubmit: {
-    paddingTop: 6
+    marginTop: 10,
+    fontSize: 18
   },
-  icon:{
+  icon: {
     paddingHorizontal: 8,
     paddingTop: 4
   },
+  filterAndSort: {
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderColor: 'lightgrey',
+    borderRadius: 8,
+    borderLeftWidth: 2,
+    borderTopWidth: 2,
+    borderRightWidth: 2,
+    borderBottomWidth: 2
+  }
 })
 
 export default SearchBar
