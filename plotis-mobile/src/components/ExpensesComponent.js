@@ -75,7 +75,6 @@ const ExpensesComponent = (props) => {
   useEffect(() => {
     if (isMounted.current) {
     } else {
-      console.log(property)
       isMounted.current = true;
     }
   }, []) 
@@ -213,8 +212,6 @@ const ExpensesComponent = (props) => {
     if(value == ""){
       setInterestRate(0.00)
     } else {
-      console.log('value', value)
-      console.log('parse', parseFloat(value))
       setInterestRate(value)
     }
   }
@@ -391,7 +388,6 @@ const ExpensesComponent = (props) => {
   }
 
   const calculateTotalExpenseWithoutMortgage = () => {
-    console.log(parseInt(monthlyTax))
     let totalExp = parseInt(monthlyTax) + parseInt(homeInsuranceMonthly) + parseInt(hoa) + parseInt(utilities) + parseInt(additionaExpenses)
     setTotalExpWithoutMortgage(totalExp)
   }

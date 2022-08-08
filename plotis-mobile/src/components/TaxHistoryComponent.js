@@ -9,8 +9,6 @@ const TaxHistoryComponent = (props) => {
     taxHistory
   } = props
 
-  console.log(taxHistory)
-
   return (
     <View style={styles.taxHistoryContainer}>
       <View>

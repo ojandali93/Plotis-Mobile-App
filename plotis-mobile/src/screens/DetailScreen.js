@@ -11,12 +11,7 @@ import RevenueComponent from '../components/RevenueComponent'
 import InvestmentMetrics from '../components/InvestmentMetrics'
 import ContactAgentComponent from '../components/ContactAgentComponent'
 
-
-import { calculateMortgagePayment } from '../metrics'
-
-import { propertyOptions } from '../api/zillowApi'
-
-import { convertEpochToDate } from '../utilities'
+import { propertyOptions, photoOptions } from '../api/zillowApi'
 
 import axios from 'axios';
 
@@ -38,6 +33,10 @@ const DetailScreen = (props) => {
 
   const [totalExpWithoutMortgage, setTotalExpWithoutMortgage] = useState(0)
 
+  const [photoList, setPhotoList] = useState([])
+
+  const [selectedPhoto, setSelectedPhoto] = useState()
+
   const isMounted = useRef(false)
 
   let deviceWidth = Dimensions.get('window').width
@@ -56,6 +55,7 @@ const DetailScreen = (props) => {
         setProperty(response.data)
         createPriceHistory(response.data.priceHistory)
         createTaxHistory(response.data.taxHistory)
+        setSelectedPhoto(response.data.imgSrc)
       }).catch(function (error) {
         console.error(error);
       });
@@ -63,6 +63,7 @@ const DetailScreen = (props) => {
 
   useEffect(() => {
     if (isMounted.current) {
+      createPhotoList(property.zpid)
       const fullAddress = property.streetAddress + '. ' + property.city + ', ' + property.state + ' ' + property.zipcode
       setPropertyAddress(fullAddress)
       setLoadedData(true)
@@ -70,6 +71,16 @@ const DetailScreen = (props) => {
       isMounted.current = true;
     }
   }, [property]);
+
+  const createPhotoList = (zpid) => {
+    photoOptions.params.zpid = zpid
+    axios.request(photoOptions)
+      .then(function (response) {
+        setPhotoList(response.data.images)
+      }).catch(function (error) {
+        console.error(error);
+      });
+  }
 
   const createPriceHistory = (priceHistory) => {
     let priceHistoryList = []
@@ -108,68 +119,78 @@ const DetailScreen = (props) => {
     )
   }
 
+  const updateSelectedPhoto = (photo) => {
+    setSelectedPhoto(photo)
+  }
+
   const loadedScreen = () => {
     return(
-      <ScrollView>
-        <View style={styles.imagesContainer} className="images-container">
-          <View style={[styles.mainImageContainer,{height: aspectHeight}]} className="main-image-container">
-            <Image style={styles.mainImage} source={{uri: property.imgSrc}}/>
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.imagesContainer} className="images-container">
+            <View style={[styles.mainImageContainer,{height: aspectHeight}]} className="main-image-container">
+              <Image style={styles.mainImage} source={{uri: selectedPhoto}}/>
+            </View>
+            <View style={styles.carouselContainer} className="image-carousel-image">
+              <FlatList 
+                horizontal
+                data={photoList}
+                renderItem={({item}) => 
+                  <TouchableOpacity onPress={() => {updateSelectedPhoto(item)}}>
+                    <Image style={{height: carouselImageHeight, width:carouselImageWidth, marginRight: 4}} source={{uri: item}}/>
+                  </TouchableOpacity>
+                }
+              />
+            </View>
           </View>
-          <View style={styles.carouselContainer} className="image-carousel-image">
-            {/* <FlatList 
-              horizontal
-              data={carouselImages}
-              renderItem={({item}) => <Image style={{height: carouselImageHeight, width:carouselImageWidth}} source={require('../../assets/luxury-home-1.jpeg')}/>}
-            /> */}
-          </View>
-        </View>
 
-        <SummaryComponent property={property} propertyAddress={propertyAddress}/>
+          <SummaryComponent property={property} propertyAddress={propertyAddress}/>
 
-        <View style={styles.seperate}></View>
+          <View style={styles.seperate}></View>
 
-        <DetailsComponent property={property} />
+          <DetailsComponent property={property} />
 
-        <View style={styles.seperate}></View>
+          <View style={styles.seperate}></View>
 
-        <PropertyValueComponent property={property} priceHistory={priceHistory}/>
+          <PropertyValueComponent property={property} priceHistory={priceHistory}/>
 
-        <View style={styles.seperate}></View> 
-              
-        <TaxHistoryComponent property={property} taxHistory={taxHistory}/>
+          <View style={styles.seperate}></View> 
+                
+          <TaxHistoryComponent property={property} taxHistory={taxHistory}/>
 
-        <View style={styles.seperate}></View>
+          <View style={styles.seperate}></View>
 
-        <RevenueComponent 
-          property={property}
-          setTotalOverallRevenue={setTotalOverallRevenue}/>
+          <RevenueComponent 
+            property={property}
+            setTotalOverallRevenue={setTotalOverallRevenue}/>
 
-        <View style={styles.seperate}></View>
+          <View style={styles.seperate}></View>
 
-        <ExpensesComponent 
-          property={property}
-          setTotalOverallExpenses={setTotalOverallExpenses}
-          setTotalPrincipalAndInterest={setTotalPrincipalAndInterest}
-          setTotalDownPayment={setTotalDownPayment}
-          setTotalExpWithoutMortgage={setTotalExpWithoutMortgage}
-        />
+          <ExpensesComponent 
+            property={property}
+            setTotalOverallExpenses={setTotalOverallExpenses}
+            setTotalPrincipalAndInterest={setTotalPrincipalAndInterest}
+            setTotalDownPayment={setTotalDownPayment}
+            setTotalExpWithoutMortgage={setTotalExpWithoutMortgage}
+          />
 
-        <View style={styles.seperate}></View>
+          <View style={styles.seperate}></View>
 
-        <InvestmentMetrics 
-          property={property}
-          totalOverallExpenses={totalOverallExpenses}
-          totalOverallRevenue={totalOverallRevenue}
-          totalPrincipalAndInterest={totalPrincipalAndInterest}
-          totalDownPayment={totalDownPayment}
-          totalExpWithoutMortgage={totalExpWithoutMortgage}
-        />
+          <InvestmentMetrics 
+            property={property}
+            totalOverallExpenses={totalOverallExpenses}
+            totalOverallRevenue={totalOverallRevenue}
+            totalPrincipalAndInterest={totalPrincipalAndInterest}
+            totalDownPayment={totalDownPayment}
+            totalExpWithoutMortgage={totalExpWithoutMortgage}
+          />
 
-        <View style={styles.seperate}></View>
+          <View style={styles.seperate}></View>
 
-        <ContactAgentComponent property={property}/>
-        
-      </ScrollView>
+          {/* <ContactAgentComponent property={property}/> */}
+          
+        </ScrollView>
+      </View> 
     )
   }
 
@@ -186,6 +207,11 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 44,
+    marginBottom: 40,
+    height: 800,
   },
   imagesContainer: {
     display: 'flex',

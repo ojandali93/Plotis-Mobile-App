@@ -7,7 +7,6 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import HomeScreen from './src/screens/HomeScreen.js';
-import PropertyDetail from './src/screens/PropertyDetail.js';
 import FavoriteScreen from './src/screens/FavoriteScreen.js';
 import ActivityScreen from './src/screens/ActivityScreen.js';
 import MessagesScreen from './src/screens/MessagesScreen.js';
@@ -40,7 +39,7 @@ const FavoriteStack = () => {
   return (
     <StackNav.Navigator>
       <StackNav.Screen name="FavoritesStack" component={FavoriteScreen} />
-      <StackNav.Screen name="FavoriteDetailsStack" component={PropertyDetail} />
+      <StackNav.Screen name="FavoriteDetailsStack" component={DetailScreen} />
     </StackNav.Navigator>
   )
 } 
@@ -49,7 +48,7 @@ const ActivityStack = () => {
   return (
     <StackNav.Navigator>
       <StackNav.Screen name="ActivityStack" component={ActivityScreen} />
-      <StackNav.Screen name="ActivityDetailsStack" component={PropertyDetail} />
+      <StackNav.Screen name="ActivityDetailsStack" component={DetailScreen} />
     </StackNav.Navigator>
   )
 }

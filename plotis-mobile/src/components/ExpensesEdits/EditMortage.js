@@ -17,10 +17,6 @@ const EditMortage = (props) => {
     editInterestRate
   } = props
 
-  useEffect(() => {
-    console.log(homePrice)
-  }, [])
-
   return (
     <View>
       <View>

@@ -8,8 +8,6 @@ const EditPropertyTax = (props) => {
     yearlyTax
   } = props
 
-  console.log(homePrice)
-
   return (
     <View>
       <View>
