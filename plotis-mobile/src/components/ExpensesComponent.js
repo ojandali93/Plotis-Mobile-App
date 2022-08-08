@@ -75,6 +75,7 @@ const ExpensesComponent = (props) => {
   useEffect(() => {
     if (isMounted.current) {
     } else {
+      console.log(property)
       isMounted.current = true;
     }
   }, []) 

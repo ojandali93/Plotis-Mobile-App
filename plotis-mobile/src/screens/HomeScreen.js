@@ -216,6 +216,7 @@ const HomeScreen = ({navigation}) => {
   }
 
   const applyFilterAndSort = () => {
+    setOpenSortAndFilter(false)
     if(minPrice != undefined){
       generalOptions.params.minPrice = minPrice
     }
@@ -281,9 +282,6 @@ const HomeScreen = ({navigation}) => {
         updateSortFilter={updateSortFilter}
         setPreviousSearch={setPreviousSearch}/>
       {
-        loading == false ? null : <LoadingBar search={search}/>
-      }
-      {
         openSortAndFilter == false ? null : <SortAndFilter 
                                               selectedSort={selectedSort}
                                               setSelectedSort={setSelectedSort}
@@ -307,6 +305,9 @@ const HomeScreen = ({navigation}) => {
                                             />
       }
       <View style={styles.seperator}></View>
+      {
+        loading == false ? null : <LoadingBar search={search}/>
+      }
       <FlatList 
         data={results}
         renderItem={({item}) => <PropertyTile 
@@ -316,17 +317,17 @@ const HomeScreen = ({navigation}) => {
                                   favoritesZpid={favoritesZpid}
                                   removeDoc={removeDoc}/>}
       />
-      <View >
+      <View style={styles.paginationContainer}>
         <TouchableOpacity onPress={() => {goToPreviousPage()}}>
-          <FontAwesome style={styles.icon} size={20} name='chevron-right'/>
+          <FontAwesome style={styles.icon} size={36} name='chevron-left'/>
         </TouchableOpacity>
           {
-            previousPage == 0 ? null : <Text>{previousPage}</Text>
+            previousPage == 0 ? null : <Text style={styles.pageValue}>{previousPage}</Text>
           }
-          <Text>{pageNumber}</Text>
-          <Text>{nextPage}</Text>
+          <Text style={styles.pageValue}>{pageNumber}</Text>
+          <Text style={styles.pageValue}>{nextPage}</Text>
         <TouchableOpacity onPress={() => {goToNextPage()}}>
-          <FontAwesome style={styles.icon} size={20} name='chevron-right'/>
+          <FontAwesome style={styles.icon} size={36} name='chevron-right'/>
         </TouchableOpacity>
       </View>
     </View>
@@ -340,14 +341,32 @@ const styles = StyleSheet.create({
     marginTop: 44,
     marginBottom: 40,
     height: 800,
-    borderTopColor: 'lightgrey',
+    borderTopColor: 'grey',
     borderTopWidth: 2
   },
   seperator: {
     width: '100%',
     height: 2,
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'grey',
     marginBottom: 8
+  },
+  paginationContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    borderTopColor: 'grey',
+    borderTopWidth: 2,
+    alignItems: 'center'
+  },
+  icon: {
+    paddingHorizontal: 16
+  },
+  pageValue: {
+    fontSize: 24,
+    fontWeight: '600',
+    paddingHorizontal: 8
   }
 })
 

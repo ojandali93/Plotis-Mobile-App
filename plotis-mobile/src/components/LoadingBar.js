@@ -6,14 +6,27 @@ const LoadingBar = (props) => {
     search
   } = props
   return (
-    <View>
+    <View style={styles.container}>
       <View>
-        <Text>Loading Results: {search}</Text>
+        <Text style={styles.text}>Loading Results</Text>
       </View>
     </View>
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  text: {
+    fontSize: 16,
+    paddingVertical: 8,
+    fontWeight: '600'
+  }
+})
 
 export default LoadingBar
