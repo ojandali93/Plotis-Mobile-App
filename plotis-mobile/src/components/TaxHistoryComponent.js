@@ -11,22 +11,22 @@ const TaxHistoryComponent = (props) => {
 
   return (
     <View style={styles.taxHistoryContainer}>
-      <View>
-        <Text>Projected Market Value $1,400,000</Text>
+      <View style={styles.headContainer}>
+        <Text style={styles.text}>Projected Market Value $1,400,000</Text>
       </View>
       <View style={styles.eventContainer}>
-        <Text>Year</Text>
-        <Text>Tax($)</Text>
-        <Text>Assessment</Text>
+        <Text style={styles.label}>Year</Text>
+        <Text style={styles.label}>Tax($)</Text>
+        <Text style={styles.label}>Assessed</Text>
       </View>
       {
         taxHistory.map((item) => {
           if(item != undefined){
             return(
               <View style={styles.eventContainer} key={item.time}>
-                <Text>{convertEpochToDate(item.time)}</Text>
-                <Text>{item.taxPaid}</Text>
-                <Text>${convertToDollars(item.value)}</Text>
+                <Text style={styles.labelText}>{convertEpochToDate(item.time)}</Text>
+                <Text style={styles.labelText}>{item.taxPaid}</Text>
+                <Text style={styles.labelText}>${convertToDollars(item.value)}</Text>
               </View>
             )
           } else {
@@ -41,7 +41,6 @@ const TaxHistoryComponent = (props) => {
 const styles = StyleSheet.create({
   taxHistoryContainer: {
     width: '100%',
-    backgroundColor: '#D3D3D3',
     overflow: 'hidden',
     padding: 8
   },
@@ -50,6 +49,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 6
+  },
+  headContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  text: {
+    fontSize: 22,
+    paddingBottom: 16
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600'
+  },
+  labelText: {
+    fontSize: 16,
   }
 })
 

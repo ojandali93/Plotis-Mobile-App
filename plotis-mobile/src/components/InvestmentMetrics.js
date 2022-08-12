@@ -12,8 +12,7 @@ const InvestmentMetrics = (props) => {
     totalDownPayment,
     totalExpWithoutMortgage
   } = props
-  
-  const monthlyRent = 1423
+
 
   let montlyNetOperatingIncome = totalOverallRevenue - totalExpWithoutMortgage
   let YearlyNetOperatingIncome = montlyNetOperatingIncome * 12
@@ -25,62 +24,86 @@ const InvestmentMetrics = (props) => {
   let year1ReturnOnInvestment = ((YearlyNetOperatingIncome / totalDownPayment) * 100).toFixed(2)
 
   return (
-    <View>
-      <View>
-        <Text>Investment Metrics</Text>
+    <View style={styles.container}>
+      <View style={styles.rowContainer}>
+        <Text style={styles.label}>Investment Metrics</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Gross Monthly Income:</Text>
-        <Text>${convertToDollars(totalOverallRevenue)}</Text>
+        <Text style={styles.labelMetric}>Gross Monthly Income:</Text>
+        <Text style={styles.labelMetric}>${convertToDollars(totalOverallRevenue)}</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Gross Yearly Income:</Text>
-        <Text>${convertToDollars(totalOverallRevenue * 12)}</Text>
+        <Text style={styles.labelMetric}>Gross Yearly Income:</Text>
+        <Text style={styles.labelMetric}>${convertToDollars(totalOverallRevenue * 12)}</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Total Monthly Expenses (%):</Text>
-        <Text>{totalMonthlyExpensesPercent}%</Text>
+        <Text style={styles.labelMetric}>Total Monthly Expenses (%):</Text>
+        <Text style={styles.labelMetric}>{totalMonthlyExpensesPercent}%</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Total Monthly Expenses ($):</Text>
-        <Text>${convertToDollars(totalExpWithoutMortgage)}</Text>
+        <Text style={styles.labelMetric}>Total Monthly Expenses ($):</Text>
+        <Text style={styles.labelMetric}>${convertToDollars(totalExpWithoutMortgage)}</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Total Yearly Expenses:</Text>
-        <Text>${convertToDollars(totalExpWithoutMortgage * 12)}</Text>
+        <Text style={styles.labelMetric}>Total Yearly Expenses:</Text>
+        <Text style={styles.labelMetric}>${convertToDollars(totalExpWithoutMortgage * 12)}</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Monthly NOI: </Text>
-        <Text>${convertToDollars(montlyNetOperatingIncome)}</Text>
+        <Text style={styles.labelMetric}>Monthly NOI: </Text>
+        <Text style={styles.labelMetric}>${convertToDollars(montlyNetOperatingIncome)}</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Yearly NOI:</Text>
-        <Text>${convertToDollars(YearlyNetOperatingIncome)}</Text>
+        <Text style={styles.labelMetric}>Yearly NOI:</Text>
+        <Text style={styles.labelMetric}>${convertToDollars(YearlyNetOperatingIncome)}</Text>
       </View>
       <View style={styles.expense}>
-        <Text>CAP Rate</Text>
-        <Text>{caprate}%</Text>
+        <Text style={styles.labelMetric}>CAP Rate</Text>
+        <Text style={styles.labelMetric}>{caprate}%</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Total Cashflow Monthly: </Text>
-        <Text>${convertToDollars(monthlyCashFlow)}</Text>
+        <Text style={styles.labelMetric}>Total Cashflow Monthly: </Text>
+        <Text style={styles.labelMetric}>${convertToDollars(monthlyCashFlow)}</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Total Cashflow Yearly: </Text>
-        <Text>${convertToDollars(yearlyCashFlow)}</Text>
+        <Text style={styles.labelMetric}>Total Cashflow Yearly: </Text>
+        <Text style={styles.labelMetric}>${convertToDollars(yearlyCashFlow)}</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Cash On Cash Return</Text>
-        <Text>{cashOnCashReturn.toFixed(2) * 100}%</Text>
+        <Text style={styles.labelMetric}>Cash On Cash Return</Text>
+        <Text style={styles.labelMetric}>{(cashOnCashReturn * 100).toFixed(2)}%</Text>
       </View>
       <View style={styles.expense}>
-        <Text>Return On Initial Investment:</Text>
-        <Text>{year1ReturnOnInvestment}%</Text>
+        <Text style={styles.labelMetric}>Return On Initial Investment:</Text>
+        <Text style={styles.labelMetric}>{year1ReturnOnInvestment}%</Text>
       </View>
     </View>
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    overflow: 'hidden',
+    padding: 8
+  },
+  rowContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%'
+  },
+  label: {
+    fontSize: 24
+  },
+  expense: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8
+  },
+  labelMetric: {
+    fontSize: 16
+  }
+})
 
 export default InvestmentMetrics

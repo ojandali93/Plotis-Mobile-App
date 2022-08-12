@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
   seperate: {
     height: 2,
     width: '100%',
-    backgroundColor: 'black',
+    backgroundColor: '#005d91',
     marginVertical: 8
   },
 })

@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-import { convertToDollars } from '../utilities'
+import { convertToDollars, convertFirstUpper } from '../utilities'
 
 const SummaryComponent = (props) => {
   const {
@@ -13,14 +13,14 @@ const SummaryComponent = (props) => {
     <View style={styles.contentContainer}>
       <View style={styles.priceContainer}>
         <Text style={styles.price}>${convertToDollars(property.price)}</Text>
-        <Text>{property.homeStatus}</Text>
+        <Text style={styles.text}>{convertFirstUpper(property.homeStatus)}</Text>
       </View>
       <View>
-        <Text>{propertyAddress}</Text>
+        <Text style={styles.text}>{propertyAddress}</Text>
       </View>
       <View style={styles.summaryContainer}>
-        <Text>{property.bedrooms} Bed | {property.bathrooms} Bath | {convertToDollars(property.livingArea)} Sqft.</Text>
-        <Text>{property.homeType}</Text>
+        <Text style={styles.text}>{property.bedrooms} Bed | {property.bathrooms} Bath | {convertToDollars(property.livingArea)} Sqft.</Text>
+        <Text style={styles.text}>{convertFirstUpper(property.homeType)}</Text>
       </View>
     </View>  
   )
@@ -29,7 +29,7 @@ const SummaryComponent = (props) => {
 const styles = StyleSheet.create({
   contentContainer: {
     width: '100%',
-    backgroundColor: '#D3D3D3',
+    // backgroundColor: '#D3D3D3',
     overflow: 'hidden',
     padding: 8
   },
@@ -50,6 +50,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 6
   },
+  text: {
+    fontSize: 16,
+  }
 })
 
 export default SummaryComponent

@@ -8,6 +8,8 @@ import { calculateMortgagePayment,
   calculatePropertyTax } from '../metrics'
 import { convertToDollars } from '../utilities'
 
+import { Feather } from 'react-native-vector-icons'
+
 import EditMortage from './ExpensesEdits/EditMortage'
 import EditPropertyTax from './ExpensesEdits/EditPropertyTax'
 import EditHomeInsurance from './EditHomeInsurance'
@@ -401,121 +403,175 @@ const ExpensesComponent = (props) => {
   return (
     <View style={styles.taxHistoryContainer}>
       <View style={styles.totalExpenses}>
-        <Text>Expected Monthly Expenses: ${convertToDollars(Math.round(totalMonthlyExpenses))}</Text>
+        <Text style={styles.mainText}>Expected Monthly Expenses: ${convertToDollars(Math.round(totalMonthlyExpenses))}</Text>
       </View>
-      <TouchableOpacity onPress={() => {editingMortgage()}}>
-        <View style={styles.expense}>
-          <Text>Principle & Interest:</Text>
-          <Text>${convertToDollars(parseInt(monthlyMortgage))}</Text>
+      <View  style={styles.sortMinContainer}>
+        <TouchableOpacity  style={styles.rentBreak} onPress={() => {editingMortgage()}}>
+          <View style={styles.expense}>
+            <View style={styles.expenseValue}>
+              <Text style={styles.text}>Principle & Interest:</Text>
+            </View>
+            <View style={styles.dropDown}>
+              <Text style={styles.label}>${convertToDollars(parseInt(monthlyMortgage))}</Text>
+              {
+                editMortgage == false ? <Feather style={styles.icon} size={24} name='chevron-down'/> : <Feather style={styles.icon} size={22} name='chevron-up'/>
+              }
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View>
+          {
+            editMortgage == false ? null : <EditMortage 
+                                              homePrice={homePrice}
+                                              downPaymentAmount={downPaymentAmount}
+                                              downPaymentPercent={downPaymentPercent}
+                                              loanProgram={loanProgram}
+                                              interestRate={interestRate}
+                                              loanAmount={loanAmount}
+                                              monthlyMortgage={monthlyMortgage}
+                                              editHomePrice={editHomePrice}
+                                              editMortgageInsurance={editMortgageInsurance}
+                                              editDownPaymentAmount={editDownPaymentAmount}
+                                              editDownPaymentPercent={editDownPaymentPercent}
+                                              editLoanProgram={editLoanProgram}
+                                              editInterestRate={editInterestRate}
+                                            />
+          }
         </View>
-      </TouchableOpacity>
-      <View>
-        {
-          editMortgage == false ? null : <EditMortage 
-                                            homePrice={homePrice}
-                                            downPaymentAmount={downPaymentAmount}
-                                            downPaymentPercent={downPaymentPercent}
-                                            loanProgram={loanProgram}
-                                            interestRate={interestRate}
-                                            loanAmount={loanAmount}
-                                            monthlyMortgage={monthlyMortgage}
-                                            editHomePrice={editHomePrice}
-                                            editMortgageInsurance={editMortgageInsurance}
-                                            editDownPaymentAmount={editDownPaymentAmount}
-                                            editDownPaymentPercent={editDownPaymentPercent}
-                                            editLoanProgram={editLoanProgram}
-                                            editInterestRate={editInterestRate}
-                                          />
-        }
       </View>
       {/* <View style={styles.expense}>
         <Text>Mortgage Insurance:</Text>
         <Text>$1,221</Text>
       </View> */}
-      <TouchableOpacity onPress={() => {editingPropertyTax()}}>
-        <View style={styles.expense}>
-          <Text>Property Tax (Monthly):</Text>
-          <Text>${convertToDollars(monthlyTax)}</Text>
+      <View  style={styles.sortMinContainer}>
+        <TouchableOpacity  style={styles.rentBreak} onPress={() => {editingPropertyTax()}}>
+          <View style={styles.expense}>
+            <View style={styles.expenseValue}>
+              <Text style={styles.text}>Property Tax (Monthly):</Text>
+            </View>
+            <View style={styles.dropDown}>
+              <Text style={styles.label}>${convertToDollars(monthlyTax)}</Text>
+              {
+                editPropertyTax == false ? <Feather style={styles.icon} size={24} name='chevron-down'/> : <Feather style={styles.icon} size={22} name='chevron-up'/>
+              }
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View>
+          {
+            editPropertyTax == false ? null : <EditPropertyTax 
+                                                homePrice={homePrice}
+                                                taxRate={taxRate}
+                                                yearlyTax={yearlyTax}/>
+          }
         </View>
-      </TouchableOpacity>
-      <View>
+      </View>
+      <View  style={styles.sortMinContainer}>
+        <TouchableOpacity style={styles.rentBreak} onPress={() => {editingHomeInsurance()}}>
+          <View style={styles.expense}>
+            <View style={styles.expenseValue}>
+              <Text style={styles.text}>Home Insurance:</Text>
+            </View>
+            <View style={styles.dropDown}>
+              <Text style={styles.label}>${Math.round(convertToDollars(homeInsuranceMonthly))}</Text>
+              {
+                editHomeInsurance == false ? <Feather style={styles.icon} size={24} name='chevron-down'/> : <Feather style={styles.icon} size={22} name='chevron-up'/>
+              }
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View>
+          {
+            editHomeInsurance == false ? null : <EditHomeInsurance 
+                                                homeInsuranceYearly={homeInsuranceYearly}
+                                                homeInsuranceMonthly={homeInsuranceMonthly}/>
+          }
+        </View>
+      </View>
+      <View  style={styles.sortMinContainer}>
+        <TouchableOpacity style={styles.rentBreak} onPress={() => {editingHoa()}}>
+          <View style={styles.expense}>
+            <View style={styles.expenseValue}>
+              <Text style={styles.text}>HOA Fee's:</Text>
+            </View>
+            <View style={styles.dropDown}>
+              <Text style={styles.label}>${hoa}</Text>
+              {
+                editHoa == false ? <Feather style={styles.icon} size={24} name='chevron-down'/> : <Feather style={styles.icon} size={22} name='chevron-up'/>
+              }
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View>
+          {
+            editHoa == false ? null : <EditHoa updateHOA={updateHOA} hoa={hoa}/>
+          }
+        </View>
+      </View>
+      <View  style={styles.sortMinContainer}>
+        <TouchableOpacity style={styles.rentBreak} onPress={() => {editingUtlities()}}>
+          <View style={styles.expense}>
+            <View style={styles.expenseValue}>
+              <Text style={styles.text}>Utilities:</Text>
+            </View>
+            <View style={styles.dropDown}>
+              <Text style={styles.label}>${utilities}</Text>
+              {
+                editUtilities == false ? <Feather style={styles.icon} size={24} name='chevron-down'/> : <Feather style={styles.icon} size={22} name='chevron-up'/>
+              }
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View>
+          {
+            editUtilities == false ? null : <EditUtilities 
+                                              updateUtilities={updateUtilities} 
+                                              utilities={utilities}
+                                              gasMonthly={gasMonthly}
+                                              updateGasMonthly={updateGasMonthly}
+                                              sewerMonthly={sewerMonthly}
+                                              updateSewerMonthly={updateSewerMonthly}
+                                              waterMonthly={waterMonthly}
+                                              updateWaterMonthly={updateWaterMonthly}
+                                              electricMonthly={electricMonthly}
+                                              updateElectricMonthly={updateElectricMonthly}
+                                              />
+          }
+        </View>
+      </View>
+      <View  style={styles.sortMinContainer}>
+        <TouchableOpacity style={styles.rentBreak} onPress={() => {currentlyEditingAdditionaExpenses()}}>
+          <View style={styles.expense}>
+            <View style={styles.expenseValue}>
+              <Text style={styles.text}>Additional Expenses:</Text>
+            </View>
+            <View style={styles.dropDown}>
+              <Text style={styles.label}>${additionaExpenses}</Text>
+              {
+                editingAdditionalExpenses == false ? <Feather style={styles.icon} size={24} name='chevron-down'/> : <Feather style={styles.icon} size={22} name='chevron-up'/>
+              }
+            </View>
+          </View>
+        </TouchableOpacity>
         {
-          editPropertyTax == false ? null : <EditPropertyTax 
-                                              homePrice={homePrice}
-                                              taxRate={taxRate}
-                                              yearlyTax={yearlyTax}/>
+          editingAdditionalExpenses == false ? null : <EditAdditionaExpenses 
+                                                        internetMonthly={internetMonthly}
+                                                        maintenanceMonthly={maintenanceMonthly}
+                                                        managementMonthyl={managementMonthyl}
+                                                        vacancyMOnhtly={vacancyMOnhtly}
+                                                        repairsMonthly={repairsMonthly}
+                                                        homeWarrantlyMonthly={homeWarrantlyMonthly}
+                                                        extraExpenses={extraExpenses}
+                                                        updateInternetMonthly={updateInternetMonthly}
+                                                        updateMaintenenceMonthly={updateMaintenenceMonthly}
+                                                        updateManagementMonthly={updateManagementMonthly}
+                                                        updateVacancyMonthly={updateVacancyMonthly}
+                                                        updateHomeWarranty={updateHomeWarranty}
+                                                        updateExtraExpenses={updateExtraExpenses}
+                                                        updateRepairMonthly={updateRepairMonthly}
+                                                        />
         }
       </View>
-      <TouchableOpacity onPress={() => {editingHomeInsurance()}}>
-        <View style={styles.expense}>
-          <Text>Home Insurance:</Text>
-          <Text>${Math.round(convertToDollars(homeInsuranceMonthly))}</Text>
-        </View>
-      </TouchableOpacity>
-      <View>
-        {
-          editHomeInsurance == false ? null : <EditHomeInsurance 
-                                              homeInsuranceYearly={homeInsuranceYearly}
-                                              homeInsuranceMonthly={homeInsuranceMonthly}/>
-        }
-      </View>
-      <TouchableOpacity onPress={() => {editingHoa()}}>
-        <View style={styles.expense}>
-          <Text>HOA Fee's:</Text>
-          <Text>${hoa}</Text>
-        </View>
-      </TouchableOpacity>
-      <View>
-        {
-          editHoa == false ? null : <EditHoa updateHOA={updateHOA} hoa={hoa}/>
-        }
-      </View>
-      <TouchableOpacity onPress={() => {editingUtlities()}}>
-        <View style={styles.expense}>
-          <Text>Utilities:</Text>
-          <Text>${utilities}</Text>
-        </View>
-      </TouchableOpacity>
-      <View>
-        {
-          editUtilities == false ? null : <EditUtilities 
-                                            updateUtilities={updateUtilities} 
-                                            utilities={utilities}
-                                            gasMonthly={gasMonthly}
-                                            updateGasMonthly={updateGasMonthly}
-                                            sewerMonthly={sewerMonthly}
-                                            updateSewerMonthly={updateSewerMonthly}
-                                            waterMonthly={waterMonthly}
-                                            updateWaterMonthly={updateWaterMonthly}
-                                            electricMonthly={electricMonthly}
-                                            updateElectricMonthly={updateElectricMonthly}
-                                            />
-        }
-      </View>
-      <TouchableOpacity onPress={() => {currentlyEditingAdditionaExpenses()}}>
-        <View style={styles.expense}>
-          <Text>Additional Expenses:</Text>
-          <Text>${additionaExpenses}</Text>
-        </View>
-      </TouchableOpacity>
-      {
-        editingAdditionalExpenses == false ? null : <EditAdditionaExpenses 
-                                                      internetMonthly={internetMonthly}
-                                                      maintenanceMonthly={maintenanceMonthly}
-                                                      managementMonthyl={managementMonthyl}
-                                                      vacancyMOnhtly={vacancyMOnhtly}
-                                                      repairsMonthly={repairsMonthly}
-                                                      homeWarrantlyMonthly={homeWarrantlyMonthly}
-                                                      extraExpenses={extraExpenses}
-                                                      updateInternetMonthly={updateInternetMonthly}
-                                                      updateMaintenenceMonthly={updateMaintenenceMonthly}
-                                                      updateManagementMonthly={updateManagementMonthly}
-                                                      updateVacancyMonthly={updateVacancyMonthly}
-                                                      updateHomeWarranty={updateHomeWarranty}
-                                                      updateExtraExpenses={updateExtraExpenses}
-                                                      updateRepairMonthly={updateRepairMonthly}
-                                                      />
-      }
     </View>
   )
 }
@@ -523,7 +579,6 @@ const ExpensesComponent = (props) => {
 const styles = StyleSheet.create({
   taxHistoryContainer: {
     width: '100%',
-    backgroundColor: '#D3D3D3',
     overflow: 'hidden',
     padding: 8
   },
@@ -531,13 +586,47 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    width: '100%'
+    width: '100%',
+    paddingBottom: 8
   },
   expense: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%'
+    alignItems: 'center'
+  },
+  expenseValue: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  mainText: {
+    fontSize: 22
+  },
+  label: {
+    fontSize: 18,
+    marginRight: 8
+  },
+  dropDown: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  sortMinContainer: {
+    borderColor: 'grey',
+    borderWidth: 1,
+    marginVertical: 8,
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: '400',
+    marginLeft: 8,
+    paddingVertical: 8
+  },
+  rentBreak: {
+    borderBottomColor: 'grey',
+    borderBottomWidth: 1
+  },
+  icon: {
+    paddingRight: 4
   }
 })
 

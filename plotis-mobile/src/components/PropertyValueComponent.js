@@ -11,21 +11,21 @@ const PropertyValueComponent = (props) => {
 
   return (
     <View style={styles.priceHistoryContainer}>
-      <View>
-        <Text>Projected Market Value ${convertToDollars(property.zestimate)}</Text>
+      <View style={styles.headContainer}>
+        <Text style={styles.text}>Projected Market Value ${convertToDollars(property.zestimate)}</Text>
       </View>
       <View style={styles.eventContainer}>
-        <Text>Date</Text>
-        <Text>Event</Text>
-        <Text>Price</Text>
+        <Text style={styles.label}>Date</Text>
+        <Text style={styles.label}>Event</Text>
+        <Text style={styles.label}>Price</Text>
       </View>
       {
         priceHistory.map((item) => {
           return(
             <View style={styles.eventContainer} key={item.date}>
-              <Text>{item.date}</Text>
-              <Text>{item.event}</Text>
-              <Text>${convertToDollars(item.price)}</Text>
+              <Text style={styles.labelText}>{item.date}</Text>
+              <Text style={styles.labelText}>{item.event}</Text>
+              <Text style={styles.labelText}>${convertToDollars(item.price)}</Text>
             </View>
           )
         })
@@ -37,7 +37,6 @@ const PropertyValueComponent = (props) => {
 const styles = StyleSheet.create({
   priceHistoryContainer: {
     width: '100%',
-    backgroundColor: '#D3D3D3',
     overflow: 'hidden',
     padding: 8
   },
@@ -46,6 +45,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 6
+  },
+  headContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  text: {
+    fontSize: 22,
+    paddingBottom: 16
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600'
+  },
+  labelText: {
+    fontSize: 16,
   }
 })
 
