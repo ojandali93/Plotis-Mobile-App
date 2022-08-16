@@ -36,9 +36,6 @@ const DetailsComponent = (props) => {
           property.resoFacts.hasCooling == true ? <Text>Included</Text> : <Text>Not Included</Text>
         }</Text>
       </View>
-      <View style={styles.infoView}>
-        <Text style={styles.info}><Text style={styles.category}>Brokerage:</Text> {property.brokerageName}</Text>
-      </View>
     </View> 
   )
 }

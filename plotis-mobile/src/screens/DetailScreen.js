@@ -9,6 +9,8 @@ import TaxHistoryComponent from '../components/TaxHistoryComponent'
 import ExpensesComponent from '../components/ExpensesComponent'
 import RevenueComponent from '../components/RevenueComponent'
 import InvestmentMetrics from '../components/InvestmentMetrics'
+import ListingInfoComponent from '../components/ListingInfoComponent'
+import SimilarListings from '../components/SimilarListings'
 import ContactAgentComponent from '../components/ContactAgentComponent'
 
 import { propertyOptions, photoOptions } from '../api/zillowApi'
@@ -17,7 +19,8 @@ import axios from 'axios';
 
 const DetailScreen = (props) => {
   const {
-    route
+    route,
+    navigation
   } = props
 
   const [property, setProperty] = useState(route.params.property)
@@ -187,7 +190,17 @@ const DetailScreen = (props) => {
 
           <View style={styles.seperate}></View>
 
-          {/* <ContactAgentComponent property={property}/> */}
+          <ListingInfoComponent property={property} />
+
+          <View style={styles.seperate}></View>
+
+          <ContactAgentComponent property={property} />
+
+          <View style={styles.seperate}></View>
+
+          <SimilarListings property={property} />
+
+          <View style={styles.seperate}></View>
           
         </ScrollView>
       </View> 

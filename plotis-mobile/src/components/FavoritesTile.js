@@ -49,9 +49,6 @@ const FavoritesTile = (props) => {
         <View style={[styles.imageContainer,{height: aspectHeight}]}>
           <Image style={styles.mainImage} source={{uri: item.imgSrc}}/>
         </View>
-        {/* <TouchableOpacity onPress={() => {addToFavorites()}}>
-          <FontAwesome style={styles.icon} size={20} name='heart'/>
-        </TouchableOpacity> */}
         <View style={styles.contentContainer}>
           <View style={styles.priceContainer}>
             <Text style={styles.price}>${convertToDollars(item.price)}</Text>
@@ -67,7 +64,7 @@ const FavoritesTile = (props) => {
           <View style={styles.separator}></View>
           <View style={styles.menuContainer}>
             <View style={styles.boxRemove}>
-              <TouchableOpacity onPress={() => {removeDoc(item)}}>
+              <TouchableOpacity onPress={() => {removeFromFavorites(item)}}>
                 <Text style={styles.button}>
                   Remove from Watchlist
                 </Text>
@@ -81,23 +78,6 @@ const FavoritesTile = (props) => {
               </TouchableOpacity>
             </View>
           </View>
-          {/* <View style={styles.details}>
-            <View style={styles.metricContainer}>
-              <Text style={styles.metricName}>Net Operating Income (Monthly): </Text>
-              <Text style={styles.metricValue}>$5,789</Text>
-            </View>
-            <View style={styles.metricContainer}>
-              <Text style={styles.metricName}>Cash on Cash Return: </Text>
-              <Text style={styles.metricValue}>2.45%</Text>
-            </View>
-            <View style={styles.metricContainer}>
-              <Text style={styles.metricName}>Return on Initial Investment: </Text>
-              <Text style={styles.metricValue}>9.97%</Text>
-            </View>
-          </View>
-          <View style={styles.disclaimerContainer}>
-            <Text style={styles.disclaimer}>*** 30 year fixed, 20% down, 3.14% interest rate ***</Text>
-          </View> */}
         </View>
       </TouchableOpacity>
     </View>

@@ -17,7 +17,7 @@ import DetailScreen from './src/screens/DetailScreen.js';
 import LoginScreen from './src/screens/LoginScreen.js';
 import SignUpScreen from './src/screens/SignUpScreen.js';
 import CreateProfileScreen from './src/screens/CreateProfileScreen.js';
-
+import ContactScreen from './src/screens/ContactScreen.js';
 import Feather from 'react-native-vector-icons/Feather'
 
 console.disableYellowBox = true;
@@ -31,6 +31,7 @@ const HomeStack = () => {
     <StackNav.Navigator initialRouteName='Home' screenOptions={{headerShown: false}}>
       <StackNav.Screen name="HomeStack" component={HomeScreen}/>
       <StackNav.Screen name="HomeDetailsStack" component={DetailScreen} />
+      <StackNav.Screen name="ContactAgentStack" component={ContactScreen} />
      </StackNav.Navigator>
   )
 }
